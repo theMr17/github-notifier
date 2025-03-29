@@ -1,6 +1,6 @@
 name: "Bug Report"
 description: "Report a reproducible bug or crash in the app."
-title: "[BUG]: "
+title: "[Bug]: "
 labels: ["bug"]
 body:
   - type: markdown

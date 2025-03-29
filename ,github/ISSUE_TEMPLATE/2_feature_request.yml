@@ -1,0 +1,50 @@
+name: "Feature Request"
+description: "Suggest a new feature or improvement"
+title: "[Feature Request]: "
+labels: ["feature request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to submit a feature request. Your feedback helps improve the project.
+
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a new request, **please check the issue tracker** to ensure it hasn’t already been proposed.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Clearly explain what needs to be added or improved. 
+        
+        **Example:**  
+        "Set up the Android project structure with appropriate modules and dependencies."  
+        "Add a bottom navigation bar for easier navigation."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: |
+        Describe how this feature should work and what improvements it would bring. 
+        
+        **Example:**  
+        "Adding a bottom navigation bar would allow users to switch screens quickly."
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: |
+        Provide any other relevant details, mockups, or screenshots related to this feature request.
+
+        **Tip:** Drag and drop images or files here to attach them.
+    validations:
+      required: false
