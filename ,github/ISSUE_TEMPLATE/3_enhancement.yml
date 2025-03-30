@@ -18,7 +18,7 @@ body:
     attributes:
       label: Summary of Improvement
       description: |
-        Briefly describe the improvement or refactor needed. 
+        Briefly describe the improvement or refactor needed.
 
         **Example:**
         "Optimize the data caching mechanism to improve performance."
