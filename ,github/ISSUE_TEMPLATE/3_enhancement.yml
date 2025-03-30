@@ -20,8 +20,8 @@ body:
       description: |
         Briefly describe the improvement or refactor needed. 
         
-        **Example:**  
-        "Optimize the data caching mechanism to improve performance."  
+        **Example:**
+        "Optimize the data caching mechanism to improve performance."
         "Refactor the API service layer to improve maintainability."
     validations:
       required: true
@@ -31,9 +31,9 @@ body:
     attributes:
       label: Current Implementation
       description: |
-        Describe how the current implementation works and any issues with it. 
+        Describe how the current implementation works and any issues with it.
         
-        **Example:**  
+        **Example:**
         "The API calls are handled in multiple places, making maintenance difficult."
     validations:
       required: true
@@ -43,9 +43,9 @@ body:
     attributes:
       label: Proposed Solution
       description: |
-        Explain how this should be improved or refactored. 
+        Explain how this should be improved or refactored.
         
-        **Example:**  
+        **Example:**
         "Move API calls to a dedicated repository class and use dependency injection for better testability."
     validations:
       required: true

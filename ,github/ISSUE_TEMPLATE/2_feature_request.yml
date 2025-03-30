@@ -18,10 +18,10 @@ body:
     attributes:
       label: Description
       description: |
-        Clearly explain what needs to be added or improved. 
+        Clearly explain what needs to be added or improved.
         
-        **Example:**  
-        "Set up the Android project structure with appropriate modules and dependencies."  
+        **Example:**
+        "Set up the Android project structure with appropriate modules and dependencies."
         "Add a bottom navigation bar for easier navigation."
     validations:
       required: true
@@ -31,9 +31,9 @@ body:
     attributes:
       label: Proposed Solution
       description: |
-        Describe how this feature should work and what improvements it would bring. 
+        Describe how this feature should work and what improvements it would bring.
         
-        **Example:**  
+        **Example:**
         "Adding a bottom navigation bar would allow users to switch screens quickly."
     validations:
       required: true
