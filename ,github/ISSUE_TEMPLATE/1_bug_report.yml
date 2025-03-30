@@ -19,7 +19,7 @@ body:
       label: Describe the bug
       description: |
         Provide a clear and concise description of the issue.
-        
+
         **Example:**
         "When I tap the settings button, the app crashes instead of opening the settings screen."
     validations:
@@ -82,7 +82,7 @@ body:
       label: Log Output (if applicable)
       description: |
         Paste relevant logs from Logcat or crash reports.
-        
+
         **Tip:** Use triple backticks (```) to format logs properly.
       render: shell
     validations:

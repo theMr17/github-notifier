@@ -19,7 +19,7 @@ body:
       label: Description
       description: |
         Clearly explain what needs to be added or improved.
-        
+
         **Example:**
         "Set up the Android project structure with appropriate modules and dependencies."
         "Add a bottom navigation bar for easier navigation."
@@ -32,7 +32,7 @@ body:
       label: Proposed Solution
       description: |
         Describe how this feature should work and what improvements it would bring.
-        
+
         **Example:**
         "Adding a bottom navigation bar would allow users to switch screens quickly."
     validations:
