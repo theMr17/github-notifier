@@ -1,0 +1,89 @@
+name: "Bug Report"
+description: "Report a reproducible bug or crash in the app."
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug. Your feedback helps improve the app.
+
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a new issue, **please search the issue tracker** to ensure it hasn’t already been reported.
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Describe the bug
+      description: |
+        Provide a clear and concise description of the issue.
+
+        **Example:**
+        "When I tap the settings button, the app crashes instead of opening the settings screen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps required to reproduce the issue.
+      placeholder: |
+        1. Open the app
+        2. Tap on 'Settings'
+        3. Observe the crash
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Explain what should happen instead.
+      placeholder: |
+        "Tapping the settings button should navigate to the settings screen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots-or-videos
+    attributes:
+      label: Screenshots or Videos (if applicable)
+      description: |
+        Attach screenshots or videos that help explain the issue.
+
+        **Tip:** Drag and drop files here or use the attachment button below.
+    validations:
+      required: false
+
+  - type: input
+    id: device
+    attributes:
+      label: Device/Emulator Information
+      description: Specify the device or emulator used for testing.
+      placeholder: e.g., Pixel 6
+    validations:
+      required: false
+
+  - type: input
+    id: android-version
+    attributes:
+      label: Android Version
+      description: Provide the Android version running on the device/emulator.
+      placeholder: e.g., Android 14
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log Output (if applicable)
+      description: |
+        Paste relevant logs from Logcat or crash reports.
+
+        **Tip:** Use triple backticks (```) to format logs properly.
+      render: shell
+    validations:
+      required: false

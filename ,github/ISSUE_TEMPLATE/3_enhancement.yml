@@ -1,0 +1,51 @@
+name: "Enhancement"
+description: "Suggest improvements or optimizations to existing code."
+title: "[Enhancement]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a refactor or enhancement. Improving code quality and performance benefits the entire project.
+
+  - type: markdown
+    attributes:
+      value: |
+        Before submitting a new request, **please check the issue tracker** to ensure it hasn’t already been proposed.
+
+  - type: textarea
+    id: improvement-summary
+    attributes:
+      label: Summary of Improvement
+      description: |
+        Briefly describe the improvement or refactor needed.
+
+        **Example:**
+        "Optimize the data caching mechanism to improve performance."
+        "Refactor the API service layer to improve maintainability."
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-implementation
+    attributes:
+      label: Current Implementation
+      description: |
+        Describe how the current implementation works and any issues with it.
+
+        **Example:**
+        "The API calls are handled in multiple places, making maintenance difficult."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: |
+        Explain how this should be improved or refactored.
+
+        **Example:**
+        "Move API calls to a dedicated repository class and use dependency injection for better testability."
+    validations:
+      required: true
