@@ -6,29 +6,28 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Set of Material typography styles to start with
+val GitHubNotifierFont = FontFamily.Default
+
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = GitHubNotifierFont,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
+        letterSpacing = 0.sp
+    ),
     titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        fontFamily = GitHubNotifierFont,
+        fontWeight = FontWeight.Bold,
         fontSize = 22.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = GitHubNotifierFont,
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
+        fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
 )
