@@ -51,8 +51,8 @@ jobs:
         with:
           api-level: 30
           target: default
-          arch: x86_64
-          profile: Nexus 6
+          arch: arm64-v8a
+          profile: pixel_4
           avd-name: test-avd
           emulator-options: "-no-snapshot-save -noaudio -no-boot-anim"
           script: ./gradlew connectedAndroidTest
