@@ -1,4 +1,4 @@
-name: Build Tests
+name: Run unit tests
 
 on:
   push:
@@ -6,9 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,5 +25,6 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
+
+      - name: Run tests with Gradle
+        run: ./gradlew testDebugUnitTest
