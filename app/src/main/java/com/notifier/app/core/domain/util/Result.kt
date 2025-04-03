@@ -80,6 +80,7 @@ inline fun <T, E : Error> Result<T, E>.onError(action: (E) -> Unit): Result<T, E
             action(error)
             this
         }
+
         is Result.Success -> this
     }
 }

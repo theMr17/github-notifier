@@ -20,7 +20,7 @@ import kotlin.coroutines.coroutineContext
  * @return A [Result] containing either the successful response data or a [NetworkError].
  */
 suspend inline fun <reified T> safeCall(
-    execute: () -> HttpResponse
+    execute: () -> HttpResponse,
 ): Result<T, NetworkError> {
     val response = try {
         execute()

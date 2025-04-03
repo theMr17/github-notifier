@@ -15,7 +15,7 @@ import io.ktor.client.statement.HttpResponse
  * @return A [Result] containing either the parsed response data or a [NetworkError].
  */
 suspend inline fun <reified T> responseToResult(
-    response: HttpResponse
+    response: HttpResponse,
 ): Result<T, NetworkError> {
     return when (response.status.value) {
         in 200..299 -> {

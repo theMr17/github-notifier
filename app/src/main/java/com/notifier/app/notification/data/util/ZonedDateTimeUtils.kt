@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
  * @return The parsed [ZonedDateTime] or the provided default value if parsing fails.
  */
 fun String.toZonedDateTimeOrDefault(
-    default: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.systemDefault())
+    default: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.systemDefault()),
 ): ZonedDateTime {
     return try {
         Instant.parse(this).atZone(ZoneId.systemDefault())
