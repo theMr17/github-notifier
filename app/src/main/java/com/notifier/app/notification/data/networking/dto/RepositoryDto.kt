@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RepositoryDto(
     @SerialName("archive_url")
-    val archiveUrl: String,
+    val archiveUrl: String?,
     @SerialName("assignees_url")
     val assigneesUrl: String,
     @SerialName("blobs_url")
@@ -28,7 +28,7 @@ data class RepositoryDto(
     @SerialName("deployments_url")
     val deploymentsUrl: String,
     @SerialName("description")
-    val description: String,
+    val description: String?,
     @SerialName("downloads_url")
     val downloadsUrl: String,
     @SerialName("events_url")

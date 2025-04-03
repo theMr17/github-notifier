@@ -22,6 +22,7 @@ suspend inline fun <reified T> responseToResult(
             try {
                 Result.Success(response.body<T>())
             } catch (e: NoTransformationFoundException) {
+                e.printStackTrace()
                 Result.Error(NetworkError.SERIALIZATION)
             }
         }

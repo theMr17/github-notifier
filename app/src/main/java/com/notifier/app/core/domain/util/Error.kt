@@ -1,8 +1,10 @@
 package com.notifier.app.core.domain.util
 
 /**
- * A marker interface representing an error type in the domain layer.
+ * A base interface for representing different types of errors in the application.
  *
- * Implementations of this interface should define specific error categories.
+ * Implementations of this interface should define specific error categories,
+ * such as network errors, validation errors, or business logic errors.
+ * This allows for a standardized approach to error handling throughout the application.
  */
 interface Error

@@ -16,7 +16,7 @@ data class OwnerDto(
     @SerialName("gists_url")
     val gistsUrl: String,
     @SerialName("gravatar_id")
-    val gravatarId: String,
+    val gravatarId: String?,
     @SerialName("html_url")
     val htmlUrl: String,
     @SerialName("id")

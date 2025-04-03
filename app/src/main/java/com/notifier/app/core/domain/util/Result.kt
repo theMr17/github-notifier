@@ -1,5 +1,10 @@
 package com.notifier.app.core.domain.util
 
+/**
+ * A type alias representing an error type in the domain layer.
+ *
+ * This alias is used to standardize error handling throughout the domain logic.
+ */
 typealias DomainError = Error
 
 /**

@@ -2,6 +2,7 @@ package com.notifier.app.core.data.networking
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.ANDROID
@@ -29,6 +30,13 @@ object HttpClientFactory {
         install(Logging) {
             logger = Logger.ANDROID
             level = LogLevel.ALL
+        }
+
+        // Configure request timeouts
+        install(HttpTimeout) {
+            requestTimeoutMillis = 30000  // 30 seconds
+            connectTimeoutMillis = 15000  // 15 seconds
+            socketTimeoutMillis = 15000   // 15 seconds
         }
 
         // Configure JSON serialization/deserialization
