@@ -47,6 +47,5 @@ jobs:
       - name: Run tests with AVD
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 29
           script: ./gradlew connectedAndroidTest
-
