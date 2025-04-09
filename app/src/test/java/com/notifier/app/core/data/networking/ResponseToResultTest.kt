@@ -18,6 +18,8 @@ import kotlinx.serialization.json.Json
 import org.junit.Test
 
 class ResponseToResultTest {
+    private val mockBaseUrl = "https://test.com"
+
     private val mockEngine = MockEngine { request ->
         when (request.url.encodedPath) {
             "/success" -> respond(
@@ -44,7 +46,7 @@ class ResponseToResultTest {
         @Serializable
         data class SuccessResponse(val data: String)
 
-        val response = client.get("https://test.com/success")
+        val response = client.get("${mockBaseUrl}/success")
         val result: Result<SuccessResponse, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Success::class.java)
@@ -53,7 +55,7 @@ class ResponseToResultTest {
 
     @Test
     fun testResponseToResult_with408Response_returnsRequestTimeout() = runBlocking {
-        val response = client.get("https://test.com/timeout")
+        val response = client.get("${mockBaseUrl}/timeout")
         val result: Result<Unit, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -62,7 +64,7 @@ class ResponseToResultTest {
 
     @Test
     fun testResponseToResult_with429Response_returnsTooManyRequests() = runBlocking {
-        val response = client.get("https://test.com/too_many_requests")
+        val response = client.get("${mockBaseUrl}/too_many_requests")
         val result: Result<Unit, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -71,7 +73,7 @@ class ResponseToResultTest {
 
     @Test
     fun testResponseToResult_with5xxResponse_returnsServerError() = runBlocking {
-        val response = client.get("https://test.com/server_error")
+        val response = client.get("${mockBaseUrl}/server_error")
         val result: Result<Unit, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
@@ -80,7 +82,7 @@ class ResponseToResultTest {
 
     @Test
     fun testResponseToResult_withUnknownResponse_returnsUnknownError() = runBlocking {
-        val response = client.get("https://test.com/unknown")
+        val response = client.get("${mockBaseUrl}/unknown")
         val result: Result<Unit, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
