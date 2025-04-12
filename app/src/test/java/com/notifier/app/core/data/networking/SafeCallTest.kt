@@ -32,7 +32,6 @@ class SafeCallTest {
         assertThat((result as Result.Success).data).isEqualTo("success")
     }
 
-
     @Test
     fun testSafeCall_withUnresolvedAddressException_returnsNoInternetError() = runTest {
         val result = safeCall<HttpResponse> { throw UnresolvedAddressException() }

@@ -28,6 +28,12 @@ class ResponseToResultTest {
                 headers = headersOf(HttpHeaders.ContentType, "application/json")
             )
 
+            "/invalid" -> respond(
+                content = """{"wrongField":"value"}""",
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            )
+
             "/timeout" -> respond(content = "", status = HttpStatusCode.RequestTimeout)
             "/too_many_requests" -> respond(content = "", status = HttpStatusCode.TooManyRequests)
             "/server_error" -> respond(content = "", status = HttpStatusCode.InternalServerError)
@@ -54,38 +60,42 @@ class ResponseToResultTest {
     }
 
     @Test
-    fun testResponseToResult_with408Response_returnsRequestTimeout() = runBlocking {
-        val response = client.get("${mockBaseUrl}/timeout")
-        val result: Result<Unit, NetworkError> = responseToResult(response)
+    fun testResponseToResult_with2xxResponse_withSerializationError_returnsSerializationError() {
+        // Use a data class that won't match the response
+        @Serializable
+        data class ExpectedType(val requiredField: String)
 
-        assertThat(result).isInstanceOf(Result.Error::class.java)
-        assertThat((result as Result.Error).error).isEqualTo(NetworkError.REQUEST_TIMEOUT)
+        testErrorResponse<ExpectedType>("invalid", NetworkError.SERIALIZATION)
     }
 
     @Test
-    fun testResponseToResult_with429Response_returnsTooManyRequests() = runBlocking {
-        val response = client.get("${mockBaseUrl}/too_many_requests")
-        val result: Result<Unit, NetworkError> = responseToResult(response)
-
-        assertThat(result).isInstanceOf(Result.Error::class.java)
-        assertThat((result as Result.Error).error).isEqualTo(NetworkError.TOO_MANY_REQUESTS)
+    fun testResponseToResult_with408Response_returnsRequestTimeout() {
+        testErrorResponse<Unit>("timeout", NetworkError.REQUEST_TIMEOUT)
     }
 
     @Test
-    fun testResponseToResult_with5xxResponse_returnsServerError() = runBlocking {
-        val response = client.get("${mockBaseUrl}/server_error")
-        val result: Result<Unit, NetworkError> = responseToResult(response)
-
-        assertThat(result).isInstanceOf(Result.Error::class.java)
-        assertThat((result as Result.Error).error).isEqualTo(NetworkError.SERVER_ERROR)
+    fun testResponseToResult_with429Response_returnsTooManyRequests() {
+        testErrorResponse<Unit>("too_many_requests", NetworkError.TOO_MANY_REQUESTS)
     }
 
     @Test
-    fun testResponseToResult_withUnknownResponse_returnsUnknownError() = runBlocking {
-        val response = client.get("${mockBaseUrl}/unknown")
-        val result: Result<Unit, NetworkError> = responseToResult(response)
+    fun testResponseToResult_with5xxResponse_returnsServerError() {
+        testErrorResponse<Unit>("server_error", NetworkError.SERVER_ERROR)
+    }
+
+    @Test
+    fun testResponseToResult_withUnknownResponse_returnsUnknownError() {
+        testErrorResponse<Unit>("unknown", NetworkError.UNKNOWN)
+    }
+
+    private inline fun <reified T> testErrorResponse(
+        endpoint: String,
+        expectedError: NetworkError,
+    ) = runBlocking {
+        val response = client.get("${mockBaseUrl}/${endpoint}")
+        val result: Result<T, NetworkError> = responseToResult(response)
 
         assertThat(result).isInstanceOf(Result.Error::class.java)
-        assertThat((result as Result.Error).error).isEqualTo(NetworkError.UNKNOWN)
+        assertThat((result as Result.Error).error).isEqualTo(expectedError)
     }
 }

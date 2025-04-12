@@ -2,9 +2,9 @@ package com.notifier.app.core.data.networking
 
 import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.Result
-import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
+import io.ktor.serialization.JsonConvertException
 
 /**
  * Converts an [HttpResponse] to a [Result] object, handling different HTTP status codes
@@ -21,7 +21,7 @@ suspend inline fun <reified T> responseToResult(
         in 200..299 -> {
             try {
                 Result.Success(response.body<T>())
-            } catch (e: NoTransformationFoundException) {
+            } catch (e: JsonConvertException) {
                 e.printStackTrace()
                 Result.Error(NetworkError.SERIALIZATION)
             }
