@@ -10,7 +10,9 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
+import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -51,6 +53,12 @@ object HttpClientFactory {
         // Set default request headers and properties
         defaultRequest {
             contentType(ContentType.Application.Json)
+        }
+
+        // TODO: Inject the token once dagger-hilt is setup.
+        headers {
+            append(HttpHeaders.Authorization, "Bearer ")
+            append("X-GitHub-Api-Version", "2022-11-28")
         }
     }
 }
