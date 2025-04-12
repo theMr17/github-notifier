@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.api.ClientPlugin
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
@@ -22,50 +23,40 @@ class HttpClientFactoryTest {
 
     @Test
     fun testHttpClientFactory_loggingIsInstalled() {
-        val client = createMockClient()
-
-        val isLoggingInstalled = try {
-            client.plugin(Logging)
-            true
-        } catch (e: Throwable) {
-            false
-        }
-
-        assertThat(isLoggingInstalled).isTrue()
+        assertThat(isPluginInstalled(Logging)).isTrue()
     }
 
     @Test
     fun testHttpClientFactory_timeoutIsInstalled() {
-        val client = createMockClient()
-
-        val isTimeoutInstalled = try {
-            client.plugin(HttpTimeout)
-            true
-        } catch (e: Throwable) {
-            false
-        }
-
-        assertThat(isTimeoutInstalled).isTrue()
+        assertThat(isPluginInstalled(HttpTimeout)).isTrue()
     }
 
     @Test
     fun testHttpClientFactory_contentNegotiationIsInstalled() {
-        val client = createMockClient()
-
-        val isJsonInstalled = try {
-            client.plugin(ContentNegotiation)
-            true
-        } catch (e: Throwable) {
-            false
-        }
-
-        assertThat(isJsonInstalled).isTrue()
+        assertThat(isPluginInstalled(ContentNegotiation)).isTrue()
     }
 
     private fun createMockClient(): HttpClient {
         val engine = MockEngine {
-            respond("{}", HttpStatusCode.OK, headersOf("Content-Type", "application/json"))
+            respond(
+                content = "{}",
+                status = HttpStatusCode.OK,
+                headers = headersOf("Content-Type", "application/json")
+            )
         }
         return HttpClientFactory.create(engine)
+    }
+
+    private fun <T : Any> isPluginInstalled(plugin: ClientPlugin<T>): Boolean {
+        val client = createMockClient()
+
+        // Check if the plugin is installed by trying to access it
+        return try {
+            client.plugin(plugin)
+            true
+        } catch (e: Throwable) {
+            println("Plugin ${plugin.key} not installed: ${e.message}")
+            false
+        }
     }
 }
