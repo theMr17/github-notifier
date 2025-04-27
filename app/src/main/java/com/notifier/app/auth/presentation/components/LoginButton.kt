@@ -5,7 +5,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.notifier.app.auth.presentation.util.createGitHubAuthIntent
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
@@ -22,7 +23,8 @@ fun LoginButton(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview
+@PreviewLightDark
+@PreviewDynamicColors
 @Composable
 private fun LoginButtonPreview() {
     GitHubNotifierTheme {
