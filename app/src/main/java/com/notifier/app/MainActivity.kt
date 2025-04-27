@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.notifier.app.auth.presentation.LoginButton
+import com.notifier.app.auth.presentation.components.LoginButton
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,10 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GitHubNotifierTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginButton(
-                        modifier = Modifier.padding(innerPadding),
-                        onClick = {}
-                    )
+                    LoginButton(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
