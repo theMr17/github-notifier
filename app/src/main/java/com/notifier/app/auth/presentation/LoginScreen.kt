@@ -15,6 +15,8 @@ import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable
 fun LoginScreen(
+    state: AuthState,
+    onAction: (AuthAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -32,7 +34,11 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     GitHubNotifierTheme {
         Scaffold { innerPadding ->
-            LoginScreen(modifier = Modifier.padding(innerPadding))
+            LoginScreen(
+                state = AuthState(),
+                onAction = {},
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }
