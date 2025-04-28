@@ -25,19 +25,38 @@ android {
 
     buildTypes {
         val properties = Properties().apply {
-            load(project.rootProject.file("local.properties").inputStream())
+            val localPropertiesFile = project.rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                load(localPropertiesFile.inputStream())
+            }
         }
 
         debug {
             buildConfigField("String", "BASE_URL", "\"https://api.github.com/\"")
-            buildConfigField("String", "CLIENT_ID", "\"${properties.getProperty("CLIENT_ID")}\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"${properties.getProperty("CLIENT_SECRET")}\"")
+            buildConfigField(
+                "String",
+                "CLIENT_ID",
+                "\"${properties.getProperty("CLIENT_ID", "dummy_client_id")}\""
+            )
+            buildConfigField(
+                "String",
+                "CLIENT_SECRET",
+                "\"${properties.getProperty("CLIENT_SECRET", "dummy_client_secret")}\""
+            )
         }
         release {
             isMinifyEnabled = false
             buildConfigField("String", "BASE_URL", "\"https://api.github.com/\"")
-            buildConfigField("String", "CLIENT_ID", "\"${properties.getProperty("CLIENT_ID")}\"")
-            buildConfigField("String", "CLIENT_SECRET", "\"${properties.getProperty("CLIENT_SECRET")}\"")
+            buildConfigField(
+                "String",
+                "CLIENT_ID",
+                "\"${properties.getProperty("CLIENT_ID", "dummy_client_id")}\""
+            )
+            buildConfigField(
+                "String",
+                "CLIENT_SECRET",
+                "\"${properties.getProperty("CLIENT_SECRET", "dummy_client_secret")}\""
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
