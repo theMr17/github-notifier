@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation
+package com.notifier.app.auth.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

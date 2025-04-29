@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation.components
+package com.notifier.app.auth.presentation.login.components
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable
 fun ConnectingToGitHubScreen(
+    state: ConnectingToGitHubState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -22,9 +24,25 @@ fun ConnectingToGitHubScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Connecting to GitHub...",
-        )
+        when (state.connectionState) {
+            ConnectionState.FETCHING_TOKEN -> {
+                Text(text = "Connecting to GitHub...")
+            }
+            ConnectionState.SAVING_TOKEN -> {
+                Text(text = "Saving user information...")
+            }
+            ConnectionState.SUCCESS -> {
+                Text(text = "Connected successfully!")
+                Button(
+                    onClick = { /* TODO: Navigate to the next screen */ },
+                ) {
+                    Text(text = "Continue")
+                }
+            }
+            ConnectionState.FAILED -> {
+                Text(text = "Connection Failed. Please try again.")
+            }
+        }
     }
 }
 
@@ -35,6 +53,7 @@ private fun ConnectingToGitHubScreenPreview() {
     GitHubNotifierTheme {
         Scaffold { innerPadding ->
             ConnectingToGitHubScreen(
+                state = ConnectingToGitHubState(),
                 modifier = Modifier.padding(innerPadding)
             )
         }

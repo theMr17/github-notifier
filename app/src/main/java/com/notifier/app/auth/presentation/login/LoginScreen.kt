@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation
+package com.notifier.app.auth.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.notifier.app.auth.presentation.components.LoginButton
+import com.notifier.app.auth.presentation.login.components.LoginButton
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable

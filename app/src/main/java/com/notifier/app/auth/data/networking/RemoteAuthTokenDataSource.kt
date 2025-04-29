@@ -9,8 +9,8 @@ import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.Result
 import com.notifier.app.core.domain.util.map
 import io.ktor.client.HttpClient
-import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
 import javax.inject.Inject
 
 class RemoteAuthTokenDataSource @Inject constructor(
@@ -22,7 +22,7 @@ class RemoteAuthTokenDataSource @Inject constructor(
         code: String,
     ): Result<AuthToken, NetworkError> {
         return safeCall<AuthTokenResponseDto> {
-            httpClient.get(
+            httpClient.post(
                 urlString = "https://github.com/login/oauth/access_token"
             ) {
                 parameter("client_id", clientId)

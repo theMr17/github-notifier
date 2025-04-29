@@ -91,6 +91,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.ktor)
     implementation(libs.dagger.hilt)
+    implementation(libs.hilt.navigation.compose)
+
     ksp(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
