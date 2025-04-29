@@ -15,14 +15,14 @@ data object LoginScreen
 
 @Composable
 fun LoginRoute(
-    viewModel : AuthViewModel = hiltViewModel()
+    viewModel : LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     ObserveAsEvents(events = viewModel.events) { event ->
         when (event) {
-            is AuthEvent.Error -> {
+            is LoginEvent.Error -> {
                 Toast.makeText(
                     context,
                     event.error.toString(context),

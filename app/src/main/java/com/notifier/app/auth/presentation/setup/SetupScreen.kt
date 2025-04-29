@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation.connecting
+package com.notifier.app.auth.presentation.setup
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable
-fun ConnectingToGitHubScreen(
-    state: ConnectingToGitHubState,
+fun SetupScreen(
+    state: SetupState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -24,14 +24,14 @@ fun ConnectingToGitHubScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (state.connectionState) {
-            ConnectionState.FETCHING_TOKEN -> {
+        when (state.setupStep) {
+            SetupStep.FETCHING_TOKEN -> {
                 Text(text = "Connecting to GitHub...")
             }
-            ConnectionState.SAVING_TOKEN -> {
+            SetupStep.SAVING_TOKEN -> {
                 Text(text = "Saving user information...")
             }
-            ConnectionState.SUCCESS -> {
+            SetupStep.SUCCESS -> {
                 Text(text = "Connected successfully!")
                 Button(
                     onClick = { /* TODO: Navigate to the next screen */ },
@@ -39,7 +39,7 @@ fun ConnectingToGitHubScreen(
                     Text(text = "Continue")
                 }
             }
-            ConnectionState.FAILED -> {
+            SetupStep.FAILED -> {
                 Text(text = "Connection Failed. Please try again.")
             }
         }
@@ -49,11 +49,11 @@ fun ConnectingToGitHubScreen(
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable
-private fun ConnectingToGitHubScreenPreview() {
+private fun SetupScreenPreview() {
     GitHubNotifierTheme {
         Scaffold { innerPadding ->
-            ConnectingToGitHubScreen(
-                state = ConnectingToGitHubState(),
+            SetupScreen(
+                state = SetupState(),
                 modifier = Modifier.padding(innerPadding)
             )
         }

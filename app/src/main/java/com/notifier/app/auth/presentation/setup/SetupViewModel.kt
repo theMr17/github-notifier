@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation.connecting
+package com.notifier.app.auth.presentation.setup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,25 +17,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ConnectingToGitHubViewModel @Inject constructor(
+class SetupViewModel @Inject constructor(
     private val authTokenDataSource: AuthTokenDataSource,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(ConnectingToGitHubState())
+    private val _state = MutableStateFlow(SetupState())
     val state = _state
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
-            ConnectingToGitHubState()
+            SetupState()
         )
 
-    private val _events = Channel<ConnectingToGitHubEvent>()
+    private val _events = Channel<SetupEvent>()
     val events = _events.receiveAsFlow()
 
     fun getAuthToken(code: String?) {
         if (code.isNullOrBlank()) {
             _state.update {
                 it.copy(
-                    connectionState = ConnectionState.FAILED
+                    setupStep = SetupStep.FAILED
                 )
             }
             return
@@ -43,7 +43,7 @@ class ConnectingToGitHubViewModel @Inject constructor(
 
         _state.update {
             it.copy(
-                connectionState = ConnectionState.FETCHING_TOKEN
+                setupStep = SetupStep.FETCHING_TOKEN
             )
         }
 
@@ -55,12 +55,12 @@ class ConnectingToGitHubViewModel @Inject constructor(
             ).onSuccess { authToken ->
                 _state.update {
                     it.copy(
-                        connectionState = ConnectionState.SAVING_TOKEN,
+                        setupStep = SetupStep.SAVING_TOKEN,
                         authToken = authToken
                     )
                 }
             }.onError { error ->
-                _events.send(ConnectingToGitHubEvent.Error(error))
+                _events.send(SetupEvent.Error(error))
             }
         }
     }

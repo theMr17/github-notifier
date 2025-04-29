@@ -14,8 +14,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
-import com.notifier.app.auth.presentation.connecting.ConnectingToGitHubRoute
-import com.notifier.app.auth.presentation.connecting.ConnectingToGitHubScreen
+import com.notifier.app.auth.presentation.setup.SetupRoute
+import com.notifier.app.auth.presentation.setup.SetupScreen
 import com.notifier.app.auth.presentation.login.LoginRoute
 import com.notifier.app.auth.presentation.login.LoginScreen
 import com.notifier.app.ui.theme.GitHubNotifierTheme
@@ -48,15 +48,15 @@ private fun MainAppContent() {
                 LoginRoute()
             }
 
-            composable<ConnectingToGitHubScreen>(
+            composable<SetupScreen>(
                 deepLinks = listOf(
-                    navDeepLink<ConnectingToGitHubScreen>(
+                    navDeepLink<SetupScreen>(
                         basePath = "github-notifier://auth-callback"
                     )
                 )
             ) {
-                val args = it.toRoute<ConnectingToGitHubScreen>()
-                ConnectingToGitHubRoute(code = args.code)
+                val args = it.toRoute<SetupScreen>()
+                SetupRoute(code = args.code)
             }
         }
     }

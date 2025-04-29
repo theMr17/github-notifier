@@ -1,4 +1,4 @@
-package com.notifier.app.auth.presentation.connecting
+package com.notifier.app.auth.presentation.setup
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -12,15 +12,15 @@ import com.notifier.app.core.presentation.util.toString
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ConnectingToGitHubScreen(
+data class SetupScreen(
     val code: String? = null,
     val state: String? = null,
 )
 
 @Composable
-fun ConnectingToGitHubRoute(
+fun SetupRoute(
     code: String?,
-    viewModel: ConnectingToGitHubViewModel = hiltViewModel()
+    viewModel: SetupViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -31,7 +31,7 @@ fun ConnectingToGitHubRoute(
 
     ObserveAsEvents(events = viewModel.events) { event ->
         when (event) {
-            is ConnectingToGitHubEvent.Error -> {
+            is SetupEvent.Error -> {
                 Toast.makeText(
                     context,
                     event.error.toString(context),
@@ -41,5 +41,5 @@ fun ConnectingToGitHubRoute(
         }
     }
 
-    ConnectingToGitHubScreen(state = state)
+    SetupScreen(state = state)
 }

@@ -12,23 +12,21 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val authTokenDataSource: AuthTokenDataSource,
-) : ViewModel() {
-    private val _state = MutableStateFlow(AuthState())
+class LoginViewModel @Inject constructor() : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
     val state = _state
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
-            AuthState()
+            LoginState()
         )
 
-    private val _events = Channel<AuthEvent>()
+    private val _events = Channel<LoginEvent>()
     val events = _events.receiveAsFlow()
 
-    fun onAction(action: AuthAction) {
+    fun onAction(action: LoginAction) {
         when (action) {
-            is AuthAction.OnLoginButtonClick -> {}
+            is LoginAction.OnLoginButtonClick -> {}
         }
     }
 }
