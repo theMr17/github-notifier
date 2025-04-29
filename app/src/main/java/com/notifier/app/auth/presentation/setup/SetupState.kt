@@ -10,10 +10,10 @@ data class SetupState(
 )
 
 enum class SetupStep {
-    /** Currently retrieving the OAuth token from the backend. */
+    /** Currently retrieving the access token from GitHub. */
     FETCHING_TOKEN,
 
-    /** OAuth token has been retrieved, now saving locally. */
+    /** Access token has been retrieved, now saving locally. */
     SAVING_TOKEN,
 
     /** Token saved successfully and setup is complete. */
