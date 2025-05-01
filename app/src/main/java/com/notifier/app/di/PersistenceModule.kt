@@ -32,7 +32,7 @@ object PersistenceModule {
     @Provides
     @Singleton
     fun providePreferencesDataStore(
-        @ApplicationContext appContext: Context
+        @ApplicationContext appContext: Context,
     ): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler(

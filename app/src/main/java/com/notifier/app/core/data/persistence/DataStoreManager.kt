@@ -15,7 +15,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class DataStoreManager @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
 ) {
 
     /**

@@ -13,7 +13,7 @@ class CustomTestRunner : AndroidJUnitRunner() {
     override fun newApplication(
         cl: ClassLoader?,
         name: String?,
-        context: Context?
+        context: Context?,
     ): Application {
         // Use HiltTestApplication as the application class for testing
         val applicationClassName = HiltTestApplication::class.java.name

@@ -35,7 +35,7 @@ object FakePersistenceModule {
     @Provides
     @Singleton
     fun provideTestDataStore(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): DataStore<Preferences> {
         // Double-checked locking to ensure singleton instance in a thread-safe manner
         return testDataStoreInstance ?: synchronized(this) {
