@@ -1,6 +1,5 @@
 package com.notifier.app.auth.presentation.setup
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -8,6 +7,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.notifier.app.core.presentation.util.ObserveAsEvents
+import com.notifier.app.core.presentation.util.showToast
 import com.notifier.app.core.presentation.util.toString
 import kotlinx.serialization.Serializable
 
@@ -20,7 +20,7 @@ data class SetupScreen(
 @Composable
 fun SetupRoute(
     code: String?,
-    viewModel: SetupViewModel = hiltViewModel()
+    viewModel: SetupViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -31,12 +31,12 @@ fun SetupRoute(
 
     ObserveAsEvents(events = viewModel.events) { event ->
         when (event) {
-            is SetupEvent.Error -> {
-                Toast.makeText(
-                    context,
-                    event.error.toString(context),
-                    Toast.LENGTH_LONG
-                ).show()
+            is SetupEvent.PersistenceErrorEvent -> {
+                showToast(context, event.error.toString(context))
+            }
+
+            is SetupEvent.NetworkErrorEvent -> {
+                showToast(context, event.error.toString(context))
             }
         }
     }

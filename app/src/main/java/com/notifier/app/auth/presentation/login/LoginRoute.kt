@@ -15,7 +15,7 @@ data object LoginScreen
 
 @Composable
 fun LoginRoute(
-    viewModel : LoginViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current

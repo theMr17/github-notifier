@@ -28,9 +28,11 @@ fun SetupScreen(
             SetupStep.FETCHING_TOKEN -> {
                 Text(text = "Connecting to GitHub...")
             }
+
             SetupStep.SAVING_TOKEN -> {
                 Text(text = "Saving user information...")
             }
+
             SetupStep.SUCCESS -> {
                 Text(text = "Connected successfully!")
                 Button(
@@ -39,6 +41,7 @@ fun SetupScreen(
                     Text(text = "Continue")
                 }
             }
+
             SetupStep.FAILED -> {
                 Text(text = "Connection Failed. Please try again.")
             }
