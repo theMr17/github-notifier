@@ -18,7 +18,6 @@ import javax.inject.Singleton
 class DataStoreManager @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) {
-
     /**
      * Retrieves the stored access token from DataStore.
      *
