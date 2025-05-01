@@ -76,5 +76,11 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedAndroidTest --info --daemon && killall -INT crashpad_handler
+          script: |
+            ./gradlew connectedAndroidTest --daemon
+            if [ $? -ne 0 ]; then
+              echo "Tests failed. Terminating emulator."
+              killall -INT emulator || true
+              exit 1
+            fi
 
