@@ -16,6 +16,7 @@ ksp = "2.0.21-1.0.27"
 daggerHilt = "2.56.1"
 navigation = "2.8.9"
 hiltNavigationCompose = "1.2.0"
+datastore = "1.1.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,8 +43,10 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
-dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt" }
-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
+dagger-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "dagger-hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 [plugins]

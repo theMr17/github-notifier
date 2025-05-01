@@ -20,7 +20,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.notifier.app.core.domain.CustomTestRunner"
     }
 
     buildTypes {
@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.ktor)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.navigation.compose)
 
@@ -105,6 +106,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.dagger.hilt.testing)
+    kspAndroidTest(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
