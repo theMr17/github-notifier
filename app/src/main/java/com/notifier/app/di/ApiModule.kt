@@ -16,8 +16,10 @@ import javax.inject.Singleton
 object ApiModule {
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient {
-        return HttpClientFactory.create(CIO.create())
+    fun provideHttpClient(
+        httpClientFactory: HttpClientFactory
+    ): HttpClient {
+        return httpClientFactory.create(CIO.create())
     }
 
     @Provides
