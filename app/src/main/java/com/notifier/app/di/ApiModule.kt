@@ -17,7 +17,7 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideHttpClient(
-        httpClientFactory: HttpClientFactory
+        httpClientFactory: HttpClientFactory,
     ): HttpClient {
         return httpClientFactory.create(CIO.create())
     }

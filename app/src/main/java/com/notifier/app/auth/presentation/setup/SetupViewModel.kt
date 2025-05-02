@@ -36,6 +36,16 @@ class SetupViewModel @Inject constructor(
     private val _events = Channel<SetupEvent>()
     val events = _events.receiveAsFlow()
 
+    fun onAction(action: SetupAction) {
+        when (action) {
+            is SetupAction.OnContinueButtonClick -> {
+                viewModelScope.launch {
+                    _events.send(SetupEvent.NavigateToHomeScreen)
+                }
+            }
+        }
+    }
+
     /**
      * Initiates the process of exchanging the authorization code for an access token.
      * Updates state accordingly and emits error events when necessary.

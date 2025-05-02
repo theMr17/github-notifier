@@ -19,6 +19,8 @@ import com.notifier.app.auth.presentation.login.LoginRoute
 import com.notifier.app.auth.presentation.login.LoginScreen
 import com.notifier.app.auth.presentation.setup.SetupRoute
 import com.notifier.app.auth.presentation.setup.SetupScreen
+import com.notifier.app.notification.presentation.NotificationRoute
+import com.notifier.app.notification.presentation.NotificationScreen
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +49,15 @@ private fun MainAppContent() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<LoginScreen> {
-                LoginRoute()
+                LoginRoute(
+                    onNavigateToHomeScreen = {
+                        navController.navigate(NotificationScreen) {
+                            popUpTo(LoginScreen) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
             }
 
             composable<SetupScreen>(
@@ -58,7 +68,17 @@ private fun MainAppContent() {
                 )
             ) {
                 val args = it.toRoute<SetupScreen>()
-                SetupRoute(code = args.code)
+                SetupRoute(code = args.code, onNavigateToHomeScreen = {
+                    navController.navigate(NotificationScreen) {
+                        popUpTo(LoginScreen) {
+                            inclusive = true
+                        }
+                    }
+                })
+            }
+
+            composable<NotificationScreen> {
+                NotificationRoute()
             }
         }
     }

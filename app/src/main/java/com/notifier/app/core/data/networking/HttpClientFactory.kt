@@ -26,7 +26,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class HttpClientFactory @Inject constructor(
-    private val dataStoreManager: DataStoreManager
+    private val dataStoreManager: DataStoreManager,
 ) {
     /**
      * Creates and configures an instance of [HttpClient] with logging, JSON serialization,

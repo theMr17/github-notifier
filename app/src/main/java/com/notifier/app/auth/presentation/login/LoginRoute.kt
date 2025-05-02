@@ -1,13 +1,12 @@
 package com.notifier.app.auth.presentation.login
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.notifier.app.auth.presentation.util.createGitHubAuthIntent
 import com.notifier.app.core.presentation.util.ObserveAsEvents
-import com.notifier.app.core.presentation.util.toString
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,6 +14,7 @@ data object LoginScreen
 
 @Composable
 fun LoginRoute(
+    onNavigateToHomeScreen: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -22,12 +22,12 @@ fun LoginRoute(
 
     ObserveAsEvents(events = viewModel.events) { event ->
         when (event) {
-            is LoginEvent.Error -> {
-                Toast.makeText(
-                    context,
-                    event.error.toString(context),
-                    Toast.LENGTH_LONG
-                ).show()
+            LoginEvent.NavigateToHomeScreen -> {
+                onNavigateToHomeScreen()
+            }
+
+            LoginEvent.NavigateToGitHubAuth -> {
+                context.startActivity(createGitHubAuthIntent())
             }
         }
     }

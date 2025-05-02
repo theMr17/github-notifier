@@ -20,6 +20,7 @@ data class SetupScreen(
 @Composable
 fun SetupRoute(
     code: String?,
+    onNavigateToHomeScreen: () -> Unit,
     viewModel: SetupViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -38,8 +39,15 @@ fun SetupRoute(
             is SetupEvent.NetworkErrorEvent -> {
                 showToast(context, event.error.toString(context))
             }
+
+            SetupEvent.NavigateToHomeScreen -> {
+                onNavigateToHomeScreen()
+            }
         }
     }
 
-    SetupScreen(state = state)
+    SetupScreen(
+        state = state,
+        onAction = { action -> viewModel.onAction(action) }
+    )
 }

@@ -7,17 +7,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import com.notifier.app.auth.presentation.util.createGitHubAuthIntent
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable
-fun LoginButton(modifier: Modifier = Modifier) {
+fun LoginButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Button(
         modifier = modifier,
-        onClick = {
-            context.startActivity(createGitHubAuthIntent())
-        },
+        onClick = onClick,
     ) {
         Text("Login with GitHub")
     }
@@ -28,6 +25,6 @@ fun LoginButton(modifier: Modifier = Modifier) {
 @Composable
 private fun LoginButtonPreview() {
     GitHubNotifierTheme {
-        LoginButton()
+        LoginButton(onClick = {})
     }
 }
