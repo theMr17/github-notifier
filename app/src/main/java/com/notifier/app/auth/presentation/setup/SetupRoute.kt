@@ -20,6 +20,7 @@ data class SetupScreen(
 @Composable
 fun SetupRoute(
     code: String?,
+    receivedState: String?,
     onNavigateToHomeScreen: () -> Unit,
     viewModel: SetupViewModel = hiltViewModel(),
 ) {
@@ -27,7 +28,7 @@ fun SetupRoute(
     val context = LocalContext.current
 
     LaunchedEffect(code) {
-        viewModel.getAuthToken(code)
+        viewModel.getAuthToken(code, receivedState)
     }
 
     ObserveAsEvents(events = viewModel.events) { event ->

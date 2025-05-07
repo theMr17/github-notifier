@@ -40,4 +40,38 @@ class DataStoreManager @Inject constructor(
             preferences[PreferenceKeys.ACCESS_TOKEN] = accessToken
         }
     }
+
+    /**
+     * Clears the stored access token from DataStore.
+     *
+     * @return [Result.Success] if cleared successfully, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun clearAccessToken(): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferenceKeys.ACCESS_TOKEN)
+        }
+    }
+
+    suspend fun getOAuthState(): Result<String, Error> = runDataStoreCatching {
+        dataStore.data
+            .map { preferences -> preferences[PreferenceKeys.OAUTH_STATE] ?: "" }
+            .first()
+    }
+
+    suspend fun setOAuthState(state: String): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.OAUTH_STATE] = state
+        }
+    }
+
+    /**
+     * Clears the stored OAuth state from DataStore.
+     *
+     * @return [Result.Success] if cleared successfully, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun clearOAuthState(): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferenceKeys.OAUTH_STATE)
+        }
+    }
 }

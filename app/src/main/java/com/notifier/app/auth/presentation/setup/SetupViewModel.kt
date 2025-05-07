@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.notifier.app.BuildConfig
 import com.notifier.app.auth.domain.AuthTokenDataSource
 import com.notifier.app.core.data.persistence.DataStoreManager
+import com.notifier.app.core.domain.util.Error
 import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.PersistenceError
 import com.notifier.app.core.domain.util.onError
@@ -26,70 +27,130 @@ class SetupViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SetupState())
-    val state = _state
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
-            initialValue = SetupState()
-        )
+    val state = _state.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
+        initialValue = SetupState()
+    )
 
     private val _events = Channel<SetupEvent>()
     val events = _events.receiveAsFlow()
 
     fun onAction(action: SetupAction) {
         when (action) {
-            is SetupAction.OnContinueButtonClick -> {
-                viewModelScope.launch {
-                    _events.send(SetupEvent.NavigateToHomeScreen)
-                }
-            }
+            is SetupAction.OnContinueButtonClick -> navigateToHome()
         }
     }
 
     /**
-     * Initiates the process of exchanging the authorization code for an access token.
-     * Updates state accordingly and emits error events when necessary.
+     * Handles the OAuth redirect by verifying state and requesting the access token.
      */
-    fun getAuthToken(code: String?) {
-        if (code.isNullOrBlank()) {
-            _state.update { it.copy(setupStep = SetupStep.FAILED) }
+    fun getAuthToken(code: String?, receivedState: String?) {
+        if (code.isNullOrBlank() || receivedState.isNullOrBlank()) {
+            failSetup()
             return
         }
 
-        _state.update { it.copy(setupStep = SetupStep.FETCHING_TOKEN) }
-
         viewModelScope.launch {
+            val isStateValid = validateOAuthState(receivedState)
+            if (!isStateValid) return@launch
+
+            updateSetupStep(SetupStep.FETCHING_TOKEN)
+
             authTokenDataSource.getAuthToken(
                 clientId = BuildConfig.CLIENT_ID,
                 clientSecret = BuildConfig.CLIENT_SECRET,
                 code = code
             ).onSuccess { authToken ->
-                _state.update {
-                    it.copy(
-                        setupStep = SetupStep.SAVING_TOKEN,
-                        authToken = authToken
-                    )
-                }
+                updateSetupStep(SetupStep.SAVING_TOKEN)
+                _state.update { it.copy(authToken = authToken) }
                 saveAuthToken(authToken.accessToken)
             }.onError { error ->
-                _state.update { it.copy(setupStep = SetupStep.FAILED) }
-                _events.send(SetupEvent.NetworkErrorEvent(error as NetworkError))
+                handleNetworkError(error)
             }
         }
     }
 
     /**
-     * Saves the access token to DataStore and updates setup state.
-     * Emits an error event if saving fails.
+     * Validates the received OAuth state against the saved state.
+     */
+    private suspend fun validateOAuthState(receivedState: String): Boolean {
+        var savedState = ""
+        dataStoreManager.getOAuthState()
+            .onSuccess { savedState = it }
+            .onError {
+                failSetup()
+                return false
+            }
+
+        if (receivedState != savedState) {
+            failSetup()
+            return false
+        }
+
+        dataStoreManager.clearOAuthState()
+            .onError {
+                failSetup()
+                return false
+            }
+
+        return true
+    }
+
+    /**
+     * Saves the access token and updates setup state.
      */
     private fun saveAuthToken(token: String) {
         viewModelScope.launch {
             dataStoreManager.setAccessToken(token).onSuccess {
-                _state.update { it.copy(setupStep = SetupStep.SUCCESS) }
+                updateSetupStep(SetupStep.SUCCESS)
             }.onError { error ->
-                _state.update { it.copy(setupStep = SetupStep.FAILED) }
-                _events.send(SetupEvent.PersistenceErrorEvent(error as PersistenceError))
+                failSetup()
+                handlePersistenceError(error)
             }
         }
+    }
+
+    /**
+     * Navigates to the home screen.
+     */
+    private fun navigateToHome() {
+        viewModelScope.launch {
+            _events.send(SetupEvent.NavigateToHomeScreen)
+        }
+    }
+
+    /**
+     * Updates the current setup step.
+     */
+    private fun updateSetupStep(step: SetupStep) {
+        _state.update { it.copy(setupStep = step) }
+    }
+
+    /**
+     * Sets state to failed and stops the setup process.
+     */
+    private fun failSetup() {
+        updateSetupStep(SetupStep.FAILED)
+    }
+
+    /**
+     * Emits a network error event.
+     */
+    private suspend fun handleNetworkError(error: Error) {
+        failSetup()
+        _events.send(
+            SetupEvent.NetworkErrorEvent(
+                if (error is NetworkError) error else NetworkError.UNKNOWN
+            )
+        )
+    }
+
+    /**
+     * Emits a persistence error event.
+     */
+    private suspend fun handlePersistenceError(error: Error) {
+        val actualError = if (error is PersistenceError) error else PersistenceError.UNKNOWN
+        _events.send(SetupEvent.PersistenceErrorEvent(actualError))
     }
 }

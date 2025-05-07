@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.notifier.app.auth.presentation.util.createGitHubAuthIntent
 import com.notifier.app.core.presentation.util.ObserveAsEvents
 import kotlinx.serialization.Serializable
 
@@ -15,7 +14,8 @@ data object LoginScreen
 @Composable
 fun LoginRoute(
     onNavigateToHomeScreen: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel(),
+    onNavigateToGitHubAuth: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -27,7 +27,7 @@ fun LoginRoute(
             }
 
             LoginEvent.NavigateToGitHubAuth -> {
-                context.startActivity(createGitHubAuthIntent())
+                onNavigateToGitHubAuth()
             }
         }
     }

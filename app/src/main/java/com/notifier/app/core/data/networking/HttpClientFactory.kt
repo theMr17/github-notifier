@@ -68,7 +68,7 @@ class HttpClientFactory @Inject constructor(
             dataStoreManager.getAccessToken().onSuccess {
                 retrievedToken = it
             }
-            retrievedToken
+            return@runBlocking retrievedToken
         }
 
         headers {
