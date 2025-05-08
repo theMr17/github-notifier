@@ -4,14 +4,18 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
+/**
+ * A composable button that triggers the GitHub login flow when clicked.
+ *
+ * @param onClick Lambda function to handle the button click event.
+ * @param modifier Modifier to be applied to the button, allowing customization of its layout.
+ */
 @Composable
 fun LoginButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
     Button(
         modifier = modifier,
         onClick = onClick,
@@ -20,6 +24,9 @@ fun LoginButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
+/**
+ * Preview function for the LoginButton composable in both light and dark modes with dynamic colors.
+ */
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable

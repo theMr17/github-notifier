@@ -2,7 +2,9 @@ package com.notifier.app.auth.presentation.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -12,13 +14,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
 import com.notifier.app.auth.presentation.login.components.LoginButton
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
+/**
+ * A composable function that displays the login screen UI.
+ *
+ * This function renders different views based on the login status:
+ * - **Loading**: Displays a circular progress indicator and a status message.
+ * - **Logged Out**: Displays a login button.
+ * - **Logged In**: Displays a success message.
+ *
+ * @param state The current login state that dictates what UI is shown.
+ * @param onLoginButtonClick The action to take when the login button is clicked.
+ * @param modifier An optional modifier to be applied to the root layout.
+ */
 @Composable
 fun LoginScreen(
     state: LoginState,
-    onAction: (LoginAction) -> Unit,
+    onLoginButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -27,35 +44,53 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when (state.status) {
-            LoginStatus.LOADING -> {
+            LoginStatus.LOADING, null -> {
                 CircularProgressIndicator()
-                Text(text = "Verifying authentication status...")
-            }
-
-            LoginStatus.LOGGED_IN -> {
-                onAction(LoginAction.OnUserLoggedIn)
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Verifying authentication status...")
             }
 
             LoginStatus.LOGGED_OUT -> {
-                LoginButton(
-                    onClick = {
-                        onAction(LoginAction.OnLoginButtonClick)
-                    }
-                )
+                LoginButton(onClick = onLoginButtonClick)
+            }
+
+            LoginStatus.LOGGED_IN -> {
+                Text("Logged in successfully! Redirecting...")
             }
         }
     }
 }
 
+/**
+ * Preview parameter provider for displaying different login states in previews.
+ *
+ * Provides sample values for the LoginState to simulate different UI scenarios.
+ */
+class LoginStateParameterProvider : PreviewParameterProvider<LoginState> {
+    override val values: Sequence<LoginState>
+        get() = sequenceOf(
+            LoginState(status = LoginStatus.LOADING),
+            LoginState(status = LoginStatus.LOGGED_OUT),
+            LoginState(status = LoginStatus.LOGGED_IN)
+        )
+}
+
+/**
+ * Preview of the [LoginScreen] composable with dynamic colors and support for light/dark themes.
+ *
+ * This preview allows visualization of the login screen in various states (loading, logged out, logged in).
+ */
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable
-private fun LoginScreenPreview() {
+private fun LoginScreenPreview(
+    @PreviewParameter(LoginStateParameterProvider::class) state: LoginState,
+) {
     GitHubNotifierTheme {
         Scaffold { innerPadding ->
             LoginScreen(
-                state = LoginState(),
-                onAction = {},
+                state = state,
+                onLoginButtonClick = {},
                 modifier = Modifier.padding(innerPadding)
             )
         }

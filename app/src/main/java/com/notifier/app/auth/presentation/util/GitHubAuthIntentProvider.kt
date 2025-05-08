@@ -13,7 +13,7 @@ private const val GITHUB_AUTH_BASE_URL = "https://github.com/login/oauth/authori
 
 @Singleton
 class GitHubAuthIntentProvider @Inject constructor(
-    private val dataStoreManager: DataStoreManager
+    private val dataStoreManager: DataStoreManager,
 ) {
     /**
      * Creates an [Intent] to launch the GitHub OAuth authorization page in a browser.
