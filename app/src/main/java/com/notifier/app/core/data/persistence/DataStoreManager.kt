@@ -3,6 +3,9 @@ package com.notifier.app.core.data.persistence
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.notifier.app.core.domain.util.Error
+import com.notifier.app.core.domain.util.PersistenceError
+import com.notifier.app.core.domain.util.Result
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -10,38 +13,65 @@ import javax.inject.Singleton
 
 /**
  * Manages access to DataStore for reading and writing app preferences.
- *
- * @property dataStore the injected instance of DataStore for preferences.
  */
 @Singleton
 class DataStoreManager @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) {
-
     /**
      * Retrieves the stored access token from DataStore.
      *
-     * @return the access token if found, or an empty string if not set or error occurs.
+     * @return [Result.Success] with the token, or [Result.Error] with a [PersistenceError].
      */
-    suspend fun getAccessToken(): String {
-        return try {
-            dataStore.data
-                .map { preferences -> preferences[PreferenceKeys.ACCESS_TOKEN] ?: "" }
-                .first()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            ""
-        }
+    suspend fun getAccessToken(): Result<String, Error> = runDataStoreCatching {
+        dataStore.data
+            .map { preferences -> preferences[PreferenceKeys.ACCESS_TOKEN] ?: "" }
+            .first()
     }
 
     /**
      * Saves the given access token to DataStore.
      *
      * @param accessToken the token to store.
+     * @return [Result.Success] if stored successfully, or [Result.Error] with a [PersistenceError].
      */
-    suspend fun setAccessToken(accessToken: String) {
+    suspend fun setAccessToken(accessToken: String): Result<Unit, Error> = runDataStoreCatching {
         dataStore.edit { preferences ->
             preferences[PreferenceKeys.ACCESS_TOKEN] = accessToken
+        }
+    }
+
+    /**
+     * Clears the stored access token from DataStore.
+     *
+     * @return [Result.Success] if cleared successfully, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun clearAccessToken(): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferenceKeys.ACCESS_TOKEN)
+        }
+    }
+
+    suspend fun getOAuthState(): Result<String, Error> = runDataStoreCatching {
+        dataStore.data
+            .map { preferences -> preferences[PreferenceKeys.OAUTH_STATE] ?: "" }
+            .first()
+    }
+
+    suspend fun setOAuthState(state: String): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.OAUTH_STATE] = state
+        }
+    }
+
+    /**
+     * Clears the stored OAuth state from DataStore.
+     *
+     * @return [Result.Success] if cleared successfully, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun clearOAuthState(): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences.remove(PreferenceKeys.OAUTH_STATE)
         }
     }
 }

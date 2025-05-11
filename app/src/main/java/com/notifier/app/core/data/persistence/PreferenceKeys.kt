@@ -8,4 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 object PreferenceKeys {
     /** Key for storing the user's access token. */
     val ACCESS_TOKEN = stringPreferencesKey("access_token")
+
+    /** Key for storing the user's oauth state. */
+    val OAUTH_STATE = stringPreferencesKey("oauth_state")
 }
