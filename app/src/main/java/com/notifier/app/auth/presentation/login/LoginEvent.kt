@@ -9,6 +9,7 @@ package com.notifier.app.auth.presentation.login
 sealed interface LoginEvent {
     /**
      * Event that triggers navigation to the home screen.
+     *
      * This event is fired when the user successfully logs in and should be redirected to the
      * home screen.
      */
@@ -16,6 +17,7 @@ sealed interface LoginEvent {
 
     /**
      * Event that triggers navigation to the GitHub authentication screen.
+     *
      * This event is fired when the user presses the login button to authenticate via GitHub.
      */
     data object NavigateToGitHubAuth : LoginEvent
