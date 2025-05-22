@@ -94,20 +94,21 @@ dependencies {
     implementation(libs.dagger.hilt)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.splash.screen)
+    implementation(libs.androidx.junit.ktx)
 
     ksp(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.truth)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.ktor.client.mock)
     testImplementation(libs.mockk)
 
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.dagger.hilt.testing)
+    androidTestImplementation(libs.ktor.client.mock)
     kspAndroidTest(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)

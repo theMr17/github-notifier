@@ -1,11 +1,11 @@
 package com.notifier.app.core.data.persistence
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
 import com.notifier.app.core.domain.util.Result
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,29 +31,29 @@ class DataStoreManagerTest {
         val token = "persisted_token"
         // Save the token
         val result = dataStoreManager.setAccessToken(token)
-        assert(result is Result.Success)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
         // Retrieve the token
         val retrieved = dataStoreManager.getAccessToken()
-        assert(retrieved is Result.Success)
-        assertEquals(token, (retrieved as Result.Success).data)
+        assertThat(retrieved).isInstanceOf(Result.Success::class.java)
+        assertThat((retrieved as Result.Success).data).isEqualTo(token)
     }
 
     @Test
     fun testGetAccessToken_whenTokenNotSet_returnsEmptyString() = runTest {
         val result = dataStoreManager.getAccessToken()
-        assert(result is Result.Success)
-        assertEquals("", (result as Result.Success).data)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
+        assertThat((result as Result.Success).data).isEqualTo("")
     }
 
     @Test
     fun testSetAccessToken_withEmptyString_returnsEmptyString() = runTest {
         val result = dataStoreManager.setAccessToken("")
-        assert(result is Result.Success)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
         val token = dataStoreManager.getAccessToken()
-        assert(token is Result.Success)
-        assertEquals("", (token as Result.Success).data)
+        assertThat(token).isInstanceOf(Result.Success::class.java)
+        assertThat((token as Result.Success).data).isEqualTo("")
     }
 
     @Test
@@ -63,15 +63,15 @@ class DataStoreManagerTest {
 
         // Set initial token
         var result = dataStoreManager.setAccessToken(initialToken)
-        assert(result is Result.Success)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
         // Set updated token
         result = dataStoreManager.setAccessToken(updatedToken)
-        assert(result is Result.Success)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
         // Retrieve the updated token
         val retrievedToken = dataStoreManager.getAccessToken()
-        assert(retrievedToken is Result.Success)
-        assertEquals(updatedToken, (retrievedToken as Result.Success).data)
+        assertThat(retrievedToken).isInstanceOf(Result.Success::class.java)
+        assertThat((retrievedToken as Result.Success).data).isEqualTo(updatedToken)
     }
 }
