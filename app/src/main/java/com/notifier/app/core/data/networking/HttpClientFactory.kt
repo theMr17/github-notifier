@@ -1,5 +1,7 @@
 package com.notifier.app.core.data.networking
 
+import com.notifier.app.core.data.persistence.DataStoreManager
+import com.notifier.app.core.domain.util.onSuccess
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
@@ -14,12 +16,18 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
- * Factory object for creating an instance of [HttpClient] with predefined configurations.
+ * Factory for creating an instance of [HttpClient] with predefined configurations.
  */
-object HttpClientFactory {
+@Singleton
+class HttpClientFactory @Inject constructor(
+    private val dataStoreManager: DataStoreManager,
+) {
     /**
      * Creates and configures an instance of [HttpClient] with logging, JSON serialization,
      * and default request headers.
@@ -55,9 +63,16 @@ object HttpClientFactory {
             contentType(ContentType.Application.Json)
         }
 
-        // TODO: Inject the token once dagger-hilt is setup.
+        val accessToken = runBlocking {
+            var retrievedToken = ""
+            dataStoreManager.getAccessToken().onSuccess {
+                retrievedToken = it
+            }
+            return@runBlocking retrievedToken
+        }
+
         headers {
-            append(HttpHeaders.Authorization, "Bearer ")
+            append(HttpHeaders.Authorization, "Bearer $accessToken")
             append("X-GitHub-Api-Version", "2022-11-28")
         }
     }

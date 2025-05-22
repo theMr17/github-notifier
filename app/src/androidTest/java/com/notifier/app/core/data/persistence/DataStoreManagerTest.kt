@@ -1,10 +1,11 @@
 package com.notifier.app.core.data.persistence
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.common.truth.Truth.assertThat
+import com.notifier.app.core.domain.util.Result
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,23 +29,31 @@ class DataStoreManagerTest {
     @Test
     fun testGetAccessToken_whenTokenExists_returnsToken() = runTest {
         val token = "persisted_token"
-        dataStoreManager.setAccessToken(token)
+        // Save the token
+        val result = dataStoreManager.setAccessToken(token)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
+        // Retrieve the token
         val retrieved = dataStoreManager.getAccessToken()
-        assertEquals(token, retrieved)
+        assertThat(retrieved).isInstanceOf(Result.Success::class.java)
+        assertThat((retrieved as Result.Success).data).isEqualTo(token)
     }
 
     @Test
     fun testGetAccessToken_whenTokenNotSet_returnsEmptyString() = runTest {
-        val token = dataStoreManager.getAccessToken()
-        assertEquals("", token)
+        val result = dataStoreManager.getAccessToken()
+        assertThat(result).isInstanceOf(Result.Success::class.java)
+        assertThat((result as Result.Success).data).isEqualTo("")
     }
 
     @Test
     fun testSetAccessToken_withEmptyString_returnsEmptyString() = runTest {
-        dataStoreManager.setAccessToken("")
+        val result = dataStoreManager.setAccessToken("")
+        assertThat(result).isInstanceOf(Result.Success::class.java)
+
         val token = dataStoreManager.getAccessToken()
-        assertEquals("", token)
+        assertThat(token).isInstanceOf(Result.Success::class.java)
+        assertThat((token as Result.Success).data).isEqualTo("")
     }
 
     @Test
@@ -52,10 +61,17 @@ class DataStoreManagerTest {
         val initialToken = "initial_token"
         val updatedToken = "updated_token"
 
-        dataStoreManager.setAccessToken(initialToken)
-        dataStoreManager.setAccessToken(updatedToken)
+        // Set initial token
+        var result = dataStoreManager.setAccessToken(initialToken)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
 
+        // Set updated token
+        result = dataStoreManager.setAccessToken(updatedToken)
+        assertThat(result).isInstanceOf(Result.Success::class.java)
+
+        // Retrieve the updated token
         val retrievedToken = dataStoreManager.getAccessToken()
-        assertEquals(updatedToken, retrievedToken)
+        assertThat(retrievedToken).isInstanceOf(Result.Success::class.java)
+        assertThat((retrievedToken as Result.Success).data).isEqualTo(updatedToken)
     }
 }
