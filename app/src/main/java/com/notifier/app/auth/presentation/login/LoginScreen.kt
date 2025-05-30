@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import com.notifier.app.auth.presentation.login.components.LoginButton
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
+const val TEST_TAG_CIRCULAR_PROGRESS_INDICATOR = "TestTag.CircularProgressIndicator"
+
 /**
  * A composable function that displays the login screen UI.
  *
@@ -47,7 +49,7 @@ fun LoginScreen(
         when (state.status) {
             LoginStatus.LOADING, null -> {
                 CircularProgressIndicator(
-                    modifier = Modifier.testTag("CircularProgressIndicator"),
+                    modifier = Modifier.testTag(TEST_TAG_CIRCULAR_PROGRESS_INDICATOR),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Verifying authentication status...")

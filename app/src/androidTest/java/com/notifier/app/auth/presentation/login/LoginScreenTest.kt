@@ -23,7 +23,7 @@ class LoginScreenTest {
         }
 
         composeRule
-            .onNode(hasTestTag("CircularProgressIndicator"))
+            .onNode(hasTestTag(TEST_TAG_CIRCULAR_PROGRESS_INDICATOR))
             .assertExists()
         composeRule
             .onNodeWithText("Verifying authentication status...")
