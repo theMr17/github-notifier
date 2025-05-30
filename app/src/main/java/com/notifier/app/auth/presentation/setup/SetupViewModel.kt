@@ -1,6 +1,5 @@
 package com.notifier.app.auth.presentation.setup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.notifier.app.BuildConfig
 import com.notifier.app.auth.domain.AuthTokenDataSource
@@ -10,11 +9,9 @@ import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.PersistenceError
 import com.notifier.app.core.domain.util.onError
 import com.notifier.app.core.domain.util.onSuccess
+import com.notifier.app.core.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,36 +32,24 @@ import javax.inject.Inject
 class SetupViewModel @Inject constructor(
     private val authTokenDataSource: AuthTokenDataSource,
     private val dataStoreManager: DataStoreManager,
-) : ViewModel() {
-
-    // Internal mutable state holding the current setup UI state
-    private val _state = MutableStateFlow(SetupState())
-
+) : BaseViewModel<SetupState, SetupEvent, SetupAction>(SetupState()) {
     /**
      * Public immutable state exposed to UI.
      *
      * Emits the current [SetupState] to the UI, which reflects progress through setup steps.
      */
-    val state = _state.stateIn(
+    override val state = mutableStateFlow.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
         initialValue = SetupState()
     )
-
-    // Internal channel for emitting one-time UI events (e.g., navigation, error messages)
-    private val _events = Channel<SetupEvent>()
-
-    /**
-     * Public flow of one-time events consumed by the UI (e.g., navigation triggers, error toasts).
-     */
-    val events = _events.receiveAsFlow()
 
     /**
      * Handles user actions from the UI.
      *
      * @param action the user-triggered action
      */
-    fun onAction(action: SetupAction) {
+    override fun onAction(action: SetupAction) {
         when (action) {
             is SetupAction.OnContinueButtonClick -> navigateToHome()
         }
@@ -74,7 +59,7 @@ class SetupViewModel @Inject constructor(
      * Handles the OAuth redirect by validating state and exchanging the authorization code
      * for an access token.
      *
-     * If validation or token exchange fails, updates [_state] and emits error events.
+     * If validation or token exchange fails, updates [mutableStateFlow] and emits error events.
      *
      * @param code the authorization code from OAuth callback
      * @param receivedState the OAuth state parameter from OAuth callback
@@ -97,7 +82,7 @@ class SetupViewModel @Inject constructor(
                 code = code
             ).onSuccess { authToken ->
                 updateSetupStep(SetupStep.SAVING_TOKEN)
-                _state.update { it.copy(authToken = authToken) }
+                mutableStateFlow.update { it.copy(authToken = authToken) }
                 saveAuthToken(authToken.accessToken)
             }.onError { error ->
                 handleNetworkError(error)
@@ -156,24 +141,22 @@ class SetupViewModel @Inject constructor(
      * Sends an event to navigate to the home screen.
      */
     private fun navigateToHome() {
-        viewModelScope.launch {
-            _events.send(SetupEvent.NavigateToHomeScreen)
-        }
+        sendEvent(SetupEvent.NavigateToHomeScreen)
     }
 
     /**
-     * Updates the current setup step in [_state].
+     * Updates the current setup step in [mutableStateFlow].
      *
      * @param step the new setup step
      */
     private fun updateSetupStep(step: SetupStep) {
-        _state.update { it.copy(setupStep = step) }
+        mutableStateFlow.update { it.copy(setupStep = step) }
     }
 
     /**
      * Marks the setup process as failed.
      *
-     * Updates [_state] and prevents further progress.
+     * Updates [mutableStateFlow] and prevents further progress.
      */
     private fun failSetup() {
         updateSetupStep(SetupStep.FAILED)
@@ -184,9 +167,9 @@ class SetupViewModel @Inject constructor(
      *
      * @param error the network error that occurred
      */
-    private suspend fun handleNetworkError(error: Error) {
+    private fun handleNetworkError(error: Error) {
         failSetup()
-        _events.send(
+        sendEvent(
             SetupEvent.NetworkErrorEvent(
                 if (error is NetworkError) error else NetworkError.UNKNOWN
             )
@@ -198,8 +181,8 @@ class SetupViewModel @Inject constructor(
      *
      * @param error the persistence error that occurred
      */
-    private suspend fun handlePersistenceError(error: Error) {
+    private fun handlePersistenceError(error: Error) {
         val actualError = if (error is PersistenceError) error else PersistenceError.UNKNOWN
-        _events.send(SetupEvent.PersistenceErrorEvent(actualError))
+        sendEvent(SetupEvent.PersistenceErrorEvent(actualError))
     }
 }
