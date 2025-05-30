@@ -60,9 +60,11 @@ fun SetupRoute(
             is SetupEvent.PersistenceErrorEvent -> {
                 showToast(context, event.error.toString(context))
             }
+
             is SetupEvent.NetworkErrorEvent -> {
                 showToast(context, event.error.toString(context))
             }
+
             SetupEvent.NavigateToHomeScreen -> {
                 onNavigateToHomeScreen()
             }

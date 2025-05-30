@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,7 +46,9 @@ fun LoginScreen(
     ) {
         when (state.status) {
             LoginStatus.LOADING, null -> {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    modifier = Modifier.testTag("CircularProgressIndicator"),
+                )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Verifying authentication status...")
             }
