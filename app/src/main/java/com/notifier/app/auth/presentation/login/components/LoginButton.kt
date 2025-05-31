@@ -4,8 +4,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import com.notifier.app.R
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 /**
@@ -20,7 +22,7 @@ fun LoginButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
         modifier = modifier,
         onClick = onClick,
     ) {
-        Text("Login with GitHub")
+        Text(stringResource(R.string.login_button_text))
     }
 }
 

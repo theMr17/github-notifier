@@ -10,10 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.notifier.app.R
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 /**
@@ -43,24 +45,24 @@ fun SetupScreen(
     ) {
         when (state.setupStep) {
             SetupStep.FETCHING_TOKEN -> {
-                Text(text = "Connecting to GitHub...")
+                Text(text = stringResource(R.string.fetching_token_state_message))
             }
 
             SetupStep.SAVING_TOKEN -> {
-                Text(text = "Saving user information...")
+                Text(text = stringResource(R.string.saving_token_state_message))
             }
 
             SetupStep.SUCCESS -> {
-                Text(text = "Connected successfully!")
+                Text(text = stringResource(R.string.setup_success_message))
                 Button(
                     onClick = { onAction(SetupAction.OnContinueButtonClick) },
                 ) {
-                    Text(text = "Continue")
+                    Text(text = stringResource(R.string.continue_button_text))
                 }
             }
 
             SetupStep.FAILED -> {
-                Text(text = "Connection failed. Please try again.")
+                Text(text = stringResource(R.string.setup_failed_message))
             }
         }
     }

@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import com.notifier.app.R
 import com.notifier.app.auth.presentation.login.components.LoginButton
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
@@ -52,7 +54,7 @@ fun LoginScreen(
                     modifier = Modifier.testTag(TEST_TAG_CIRCULAR_PROGRESS_INDICATOR),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Verifying authentication status...")
+                Text(stringResource(R.string.logging_in_loading_message))
             }
 
             LoginStatus.LOGGED_OUT -> {
@@ -60,7 +62,7 @@ fun LoginScreen(
             }
 
             LoginStatus.LOGGED_IN -> {
-                Text("Logged in successfully! Redirecting...")
+                Text(stringResource(R.string.logged_in_message))
             }
         }
     }

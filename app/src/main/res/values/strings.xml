@@ -6,4 +6,12 @@
     <string name="error_unknown">An unexpected error occurred. Please try again later.</string>
     <string name="error_serialization">There was an issue with the data format. Please try again later.</string>
     <string name="error_io">Something went wrong while accessing data. Please try again later.</string>
+    <string name="login_button_text">Login with GitHub</string>
+    <string name="logging_in_loading_message">Verifying authentication status…</string>
+    <string name="logged_in_message">Logged in successfully! Redirecting…</string>
+    <string name="fetching_token_state_message">Connecting to GitHub…</string>
+    <string name="saving_token_state_message">Saving user information…</string>
+    <string name="setup_success_message">Connected successfully!</string>
+    <string name="continue_button_text">Continue</string>
+    <string name="setup_failed_message">Connection failed. Please try again.</string>
 </resources>
