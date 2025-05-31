@@ -11,8 +11,6 @@ import com.notifier.app.core.domain.util.onError
 import com.notifier.app.core.domain.util.onSuccess
 import com.notifier.app.core.presentation.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,17 +31,6 @@ class SetupViewModel @Inject constructor(
     private val authTokenDataSource: AuthTokenDataSource,
     private val dataStoreManager: DataStoreManager,
 ) : BaseViewModel<SetupState, SetupEvent, SetupAction>(SetupState()) {
-    /**
-     * Public immutable state exposed to UI.
-     *
-     * Emits the current [SetupState] to the UI, which reflects progress through setup steps.
-     */
-    override val state = mutableStateFlow.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
-        initialValue = SetupState()
-    )
-
     /**
      * Handles user actions from the UI.
      *

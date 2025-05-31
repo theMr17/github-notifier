@@ -24,6 +24,7 @@ class GitHubAuthIntentProvider @Inject constructor(
         val clientId = BuildConfig.CLIENT_ID
         val state = UUID.randomUUID().toString()
 
+        // Store the state in DataStore for later validation
         runBlocking {
             dataStoreManager.setOAuthState(state)
         }

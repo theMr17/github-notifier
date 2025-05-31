@@ -42,15 +42,13 @@ class SetupScreenTest {
 
     @Test
     fun testSetupScreen_whenSuccess_showsSuccessMessageAndContinueButton_clickTriggersCallback() {
-        var continueClicked = false
+        var capturedAction: SetupAction? = null
 
         composeRule.setContent {
             SetupScreen(
                 state = SetupState(setupStep = SetupStep.SUCCESS),
                 onAction = {
-                    if (it == SetupAction.OnContinueButtonClick) {
-                        continueClicked = true
-                    }
+                    capturedAction = it
                 }
             )
         }
@@ -64,7 +62,7 @@ class SetupScreenTest {
             .assertIsDisplayed()
             .performClick()
 
-        assertThat(continueClicked).isTrue()
+        assertThat(capturedAction).isEqualTo(SetupAction.OnContinueButtonClick)
     }
 
     @Test

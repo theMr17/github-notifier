@@ -20,7 +20,7 @@ abstract class BaseViewModel<State, Event, Action>(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000L),
-                initialValue = initialState // Initial state before any flow emissions
+                initialValue = mutableStateFlow.value
             )
 
     private val _events = Channel<Event>(Channel.BUFFERED)

@@ -14,6 +14,24 @@ class LoginScreenTest {
     val composeRule = createComposeRule()
 
     @Test
+    fun testLoginScreen_whenStatusIsNull_showsProgressAndMessage() {
+        composeRule.setContent {
+            LoginScreen(
+                state = LoginState(status = null),
+                onLoginButtonClick = {}
+            )
+        }
+
+        composeRule
+            .onNode(hasTestTag(TEST_TAG_CIRCULAR_PROGRESS_INDICATOR))
+            .assertExists()
+
+        composeRule
+            .onNodeWithText("Verifying authentication status...")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun testLoginScreen_whenLoading_showsProgressAndMessage() {
         composeRule.setContent {
             LoginScreen(
@@ -25,6 +43,7 @@ class LoginScreenTest {
         composeRule
             .onNode(hasTestTag(TEST_TAG_CIRCULAR_PROGRESS_INDICATOR))
             .assertExists()
+
         composeRule
             .onNodeWithText("Verifying authentication status...")
             .assertIsDisplayed()
