@@ -22,7 +22,7 @@ class SetupScreenTest {
         }
 
         composeRule
-            .onNodeWithText("Connecting to GitHub...")
+            .onNodeWithText("Connecting to GitHub…")
             .assertIsDisplayed()
     }
 
@@ -36,7 +36,7 @@ class SetupScreenTest {
         }
 
         composeRule
-            .onNodeWithText("Saving user information...")
+            .onNodeWithText("Saving user information…")
             .assertIsDisplayed()
     }
 

@@ -27,7 +27,7 @@ class LoginScreenTest {
             .assertExists()
 
         composeRule
-            .onNodeWithText("Verifying authentication status...")
+            .onNodeWithText("Verifying authentication status…")
             .assertIsDisplayed()
     }
 
@@ -45,7 +45,7 @@ class LoginScreenTest {
             .assertExists()
 
         composeRule
-            .onNodeWithText("Verifying authentication status...")
+            .onNodeWithText("Verifying authentication status…")
             .assertIsDisplayed()
     }
 
@@ -78,7 +78,7 @@ class LoginScreenTest {
         }
 
         composeRule
-            .onNodeWithText("Logged in successfully! Redirecting...")
+            .onNodeWithText("Logged in successfully! Redirecting…")
             .assertIsDisplayed()
     }
 }
