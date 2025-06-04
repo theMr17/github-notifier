@@ -7,10 +7,11 @@ import com.notifier.app.core.domain.util.PersistenceError
 import com.notifier.app.core.domain.util.Result
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -90,7 +91,6 @@ class SetupViewModelTest {
 
             val stateStatuses = viewModel.state
                 .take(2)
-                .map { it }
                 .toList()
 
             assertThat(stateStatuses).containsExactly(
@@ -113,7 +113,6 @@ class SetupViewModelTest {
 
             val stateStatuses = viewModel.state
                 .take(2)
-                .map { it }
                 .toList()
 
             assertThat(stateStatuses).containsExactly(
@@ -122,6 +121,7 @@ class SetupViewModelTest {
             ).inOrder()
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testGetAuthToken_clearOAuthStateFailed_setsStateToFailedEventually() =
         runTest {
@@ -140,8 +140,9 @@ class SetupViewModelTest {
 
             val stateStatuses = viewModel.state
                 .take(2)
-                .map { it }
                 .toList()
+
+            advanceUntilIdle()
 
             assertThat(stateStatuses).containsExactly(
                 SetupState(SetupStep.FETCHING_TOKEN, authToken = null),
