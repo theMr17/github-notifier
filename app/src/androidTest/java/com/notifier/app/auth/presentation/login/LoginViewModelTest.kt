@@ -22,6 +22,7 @@ class LoginViewModelTest {
     @Before
     fun setUp() {
         dataStoreManager = mockk()
+        viewModel = LoginViewModel(dataStoreManager)
     }
 
     @Test
@@ -29,8 +30,6 @@ class LoginViewModelTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
-
-        viewModel = LoginViewModel(dataStoreManager)
 
         val stateStatuses = viewModel.state
             .take(3)
@@ -50,8 +49,6 @@ class LoginViewModelTest {
             dataStoreManager.getAccessToken()
         } returns Result.Success("")
 
-        viewModel = LoginViewModel(dataStoreManager)
-
         val stateStatuses = viewModel.state
             .take(3)
             .map { it.status }
@@ -69,8 +66,6 @@ class LoginViewModelTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Error(PersistenceError.IO)
-
-        viewModel = LoginViewModel(dataStoreManager)
 
         val stateStatuses = viewModel.state
             .take(3)
@@ -90,7 +85,6 @@ class LoginViewModelTest {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
 
-        viewModel = LoginViewModel(dataStoreManager)
         viewModel.onAction(LoginAction.OnLoginButtonClick)
 
         val event = viewModel.events.first()
@@ -103,7 +97,6 @@ class LoginViewModelTest {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
 
-        viewModel = LoginViewModel(dataStoreManager)
         viewModel.onAction(LoginAction.OnUserLoggedIn)
 
         val event = viewModel.events.first()
