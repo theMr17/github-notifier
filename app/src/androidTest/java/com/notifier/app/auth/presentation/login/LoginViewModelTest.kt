@@ -26,7 +26,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun testAuthStatus_whenTokenIsValid_setsStateToLoggedInEventually() = runTest {
+    fun testAuthStatus_tokenIsValid_setsStateToLoggedInEventually() = runTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
@@ -44,7 +44,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun testAuthStatus_whenTokenIsBlank_setsStateToLoggedOutEventually() = runTest {
+    fun testAuthStatus_tokenIsBlank_setsStateToLoggedOutEventually() = runTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Success("")
@@ -62,7 +62,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun testAuthStatus_whenErrorFetchingToken_setsStateToLoggedOutEventually() = runTest {
+    fun testAuthStatus_errorFetchingToken_setsStateToLoggedOutEventually() = runTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Error(PersistenceError.IO)
@@ -80,7 +80,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun testOnAction_loginButtonClick_emitsNavigateToGitHubAuthEvent() = runTest {
+    fun testOnAction_onLoginButtonClick_emitsNavigateToGitHubAuthEvent() = runTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
@@ -92,7 +92,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun testOnAction_whenUserLoggedIn_emitsNavigateToHomeScreenEvent() = runTest {
+    fun testOnAction_onUserLoggedIn_emitsNavigateToHomeScreenEvent() = runTest {
         coEvery {
             dataStoreManager.getAccessToken()
         } returns Result.Success("dummy_valid_token")
