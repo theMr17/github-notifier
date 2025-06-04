@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<State, Event, Action>(
-    private val initialState: State,
+    initialState: State,
 ) : ViewModel() {
     protected val mutableStateFlow = MutableStateFlow(initialState)
     open val state: StateFlow<State>

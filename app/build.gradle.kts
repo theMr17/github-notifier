@@ -77,6 +77,13 @@ android {
         buildConfig = true
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -110,6 +117,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.dagger.hilt.testing)
     androidTestImplementation(libs.ktor.client.mock)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockk.android)
     kspAndroidTest(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
