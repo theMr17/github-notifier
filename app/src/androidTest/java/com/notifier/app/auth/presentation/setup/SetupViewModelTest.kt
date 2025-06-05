@@ -81,9 +81,7 @@ class SetupViewModelTest {
     @Test
     fun testGetAuthToken_receivedStateDoesNotMatchSavedOauthState_setsStateToFailedEventually() =
         runTest {
-            coEvery {
-                dataStoreManager.getOAuthState()
-            } returns Result.Success("different_state")
+            mockGetOAuthStateSuccess()
 
             viewModel.getAuthToken(
                 code = "dummy_valid_code",
@@ -103,9 +101,7 @@ class SetupViewModelTest {
     @Test
     fun testGetAuthToken_getOauthStateFailed_setsStateToFailedEventually() =
         runTest {
-            coEvery {
-                dataStoreManager.getOAuthState()
-            } returns Result.Error(PersistenceError.IO)
+            mockGetOAuthStateError()
 
             viewModel.getAuthToken(
                 code = "dummy_valid_code",
@@ -125,13 +121,8 @@ class SetupViewModelTest {
     @Test
     fun testGetAuthToken_clearOAuthStateFailed_setsStateToFailedEventually() =
         runTest {
-            coEvery {
-                dataStoreManager.getOAuthState()
-            } returns Result.Success("dummy_valid_state")
-
-            coEvery {
-                dataStoreManager.clearOAuthState()
-            } returns Result.Error(PersistenceError.IO)
+            mockGetOAuthStateSuccess()
+            mockClearOAuthStateError()
 
             viewModel.getAuthToken(
                 code = "dummy_valid_code",
