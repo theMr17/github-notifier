@@ -271,7 +271,7 @@ class SetupViewModelTest {
 
     private fun mockSetAccessTokenError(
         accessToken: String = "dummy_valid_access_token",
-        error: PersistenceError = PersistenceError.IO
+        error: PersistenceError = PersistenceError.IO,
     ) {
         coEvery { dataStoreManager.setAccessToken(accessToken) } returns Result.Error(error)
     }
