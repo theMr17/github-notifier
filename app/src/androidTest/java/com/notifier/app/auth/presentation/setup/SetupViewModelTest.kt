@@ -170,6 +170,62 @@ class SetupViewModelTest {
         }
 
     @Test
+    fun testGetAuthToken_setAccessTokenFailed_setsStateToFailedEventually_emitsErrorEvent() =
+        runTest {
+            mockGetOAuthStateSuccess()
+            mockClearOAuthStateSuccess()
+            mockGetAuthTokenSuccess()
+            mockSetAccessTokenError()
+
+            val eventDeferred = async {
+                viewModel.events.first()
+            }
+
+            viewModel.getAuthToken(
+                code = "dummy_valid_code",
+                receivedState = "dummy_valid_state"
+            )
+
+            val stateStatuses = viewModel.state.take(2).toList()
+
+            // The SAVING_TOKEN step is overwritten before it is collected.
+            // So, FAILED step is directly received after FETCHING_TOKEN.
+            assertThat(stateStatuses).containsExactly(
+                SetupState(SetupStep.FETCHING_TOKEN, authToken = null),
+                SetupState(SetupStep.FAILED, authToken = dummyValidAuthToken)
+            ).inOrder()
+
+            val event = eventDeferred.await()
+
+            assertThat(event).isEqualTo(
+                SetupEvent.PersistenceErrorEvent(PersistenceError.IO)
+            )
+        }
+
+    @Test
+    fun testGetAuthToken_successfulFlow_setsStateToSuccessEventually() =
+        runTest {
+            mockGetOAuthStateSuccess()
+            mockClearOAuthStateSuccess()
+            mockGetAuthTokenSuccess()
+            mockSetAccessTokenSuccess()
+
+            viewModel.getAuthToken(
+                code = "dummy_valid_code",
+                receivedState = "dummy_valid_state"
+            )
+
+            val stateStatuses = viewModel.state.take(2).toList()
+
+            // The SAVING_TOKEN step is overwritten before it is collected.
+            // So, SUCCESS step is directly received after FETCHING_TOKEN.
+            assertThat(stateStatuses).containsExactly(
+                SetupState(SetupStep.FETCHING_TOKEN, authToken = null),
+                SetupState(SetupStep.SUCCESS, authToken = dummyValidAuthToken)
+            ).inOrder()
+        }
+
+    @Test
     fun testOnAction_onContinueButtonClick_emitsNavigateToHomeScreenEvent() = runTest {
         viewModel.onAction(SetupAction.OnContinueButtonClick)
 
