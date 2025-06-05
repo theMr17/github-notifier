@@ -2,23 +2,21 @@ package com.notifier.app.auth.presentation.setup
 
 import com.google.common.truth.Truth.assertThat
 import com.notifier.app.auth.data.networking.RemoteAuthTokenDataSource
+import com.notifier.app.auth.domain.AuthToken
 import com.notifier.app.core.data.persistence.DataStoreManager
 import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.PersistenceError
 import com.notifier.app.core.domain.util.Result
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SetupViewModelTest {
     private lateinit var authTokenDataSource: RemoteAuthTokenDataSource
 
@@ -140,8 +138,6 @@ class SetupViewModelTest {
                 receivedState = "dummy_valid_state"
             )
 
-            advanceUntilIdle()
-
             val stateStatuses = viewModel.state
                 .take(2)
                 .toList()
@@ -155,21 +151,9 @@ class SetupViewModelTest {
     @Test
     fun testGetAuthToken_networkError_setsStateToFailedEventually_emitsNetworkErrorEvent() =
         runTest {
-            coEvery {
-                dataStoreManager.getOAuthState()
-            } returns Result.Success("dummy_valid_state")
-
-            coEvery {
-                dataStoreManager.clearOAuthState()
-            } returns Result.Success(Unit)
-
-            coEvery {
-                authTokenDataSource.getAuthToken(
-                    clientId = any(),
-                    clientSecret = any(),
-                    code = "dummy_valid_code"
-                )
-            } returns Result.Error(NetworkError.SERVER_ERROR)
+            mockGetOAuthStateSuccess()
+            mockClearOAuthStateSuccess()
+            mockGetAuthTokenError()
 
             val eventDeferred = async {
                 viewModel.events.first()
@@ -201,4 +185,57 @@ class SetupViewModelTest {
         val event = viewModel.events.first()
         assertThat(event).isEqualTo(SetupEvent.NavigateToHomeScreen)
     }
+
+    private fun mockGetOAuthStateSuccess(state: String = "dummy_valid_state") {
+        coEvery { dataStoreManager.getOAuthState() } returns Result.Success(state)
+    }
+
+    private fun mockGetOAuthStateError(error: PersistenceError = PersistenceError.IO) {
+        coEvery { dataStoreManager.getOAuthState() } returns Result.Error(error)
+    }
+
+    private fun mockClearOAuthStateSuccess() {
+        coEvery { dataStoreManager.clearOAuthState() } returns Result.Success(Unit)
+    }
+
+    private fun mockClearOAuthStateError(error: PersistenceError = PersistenceError.IO) {
+        coEvery { dataStoreManager.clearOAuthState() } returns Result.Error(error)
+    }
+
+    private fun mockGetAuthTokenError(error: NetworkError = NetworkError.SERVER_ERROR) {
+        coEvery {
+            authTokenDataSource.getAuthToken(
+                clientId = any(),
+                clientSecret = any(),
+                code = "dummy_valid_code"
+            )
+        } returns Result.Error(error)
+    }
+
+    private fun mockGetAuthTokenSuccess() {
+        coEvery {
+            authTokenDataSource.getAuthToken(
+                clientId = any(),
+                clientSecret = any(),
+                code = "dummy_valid_code"
+            )
+        } returns Result.Success(dummyValidAuthToken)
+    }
+
+    private fun mockSetAccessTokenError(
+        accessToken: String = "dummy_valid_access_token",
+        error: PersistenceError = PersistenceError.IO
+    ) {
+        coEvery { dataStoreManager.setAccessToken(accessToken) } returns Result.Error(error)
+    }
+
+    private fun mockSetAccessTokenSuccess(accessToken: String = "dummy_valid_access_token") {
+        coEvery { dataStoreManager.setAccessToken(accessToken) } returns Result.Success(Unit)
+    }
+
+    private val dummyValidAuthToken = AuthToken(
+        accessToken = "dummy_valid_access_token",
+        scope = "dummy_valid_scope",
+        tokenType = "dummy_valid_token_type"
+    )
 }
