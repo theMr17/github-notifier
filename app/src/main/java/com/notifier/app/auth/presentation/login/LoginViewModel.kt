@@ -1,5 +1,6 @@
 package com.notifier.app.auth.presentation.login
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.notifier.app.core.data.persistence.DataStoreManager
 import com.notifier.app.core.domain.util.onError
@@ -70,7 +71,7 @@ class LoginViewModel @Inject constructor(
      * - [LoginStatus.LOGGED_IN] if a non-blank token exists
      * - [LoginStatus.LOGGED_OUT] otherwise
      *
-     * If an error occurs, treats user as logged out.
+     * If an error occurs, logs the error and treats user as logged out.
      */
     private fun checkAuthStatus() {
         viewModelScope.launch {
@@ -83,7 +84,8 @@ class LoginViewModel @Inject constructor(
                         )
                     }
                 }
-                .onError { _ ->
+                .onError { error ->
+                    Log.e(TAG, "Error fetching access token: $error")
                     mutableStateFlow.update { it.copy(status = LoginStatus.LOGGED_OUT) }
                 }
         }
