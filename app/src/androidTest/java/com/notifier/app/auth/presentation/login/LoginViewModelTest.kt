@@ -81,10 +81,6 @@ class LoginViewModelTest {
 
     @Test
     fun testOnAction_onLoginButtonClick_emitsNavigateToGitHubAuthEvent() = runTest {
-        coEvery {
-            dataStoreManager.getAccessToken()
-        } returns Result.Success("dummy_valid_token")
-
         viewModel.onAction(LoginAction.OnLoginButtonClick)
 
         val event = viewModel.events.first()
@@ -93,10 +89,6 @@ class LoginViewModelTest {
 
     @Test
     fun testOnAction_onUserLoggedIn_emitsNavigateToHomeScreenEvent() = runTest {
-        coEvery {
-            dataStoreManager.getAccessToken()
-        } returns Result.Success("dummy_valid_token")
-
         viewModel.onAction(LoginAction.OnUserLoggedIn)
 
         val event = viewModel.events.first()

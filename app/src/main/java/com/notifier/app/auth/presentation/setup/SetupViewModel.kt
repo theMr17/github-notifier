@@ -118,7 +118,6 @@ class SetupViewModel @Inject constructor(
             dataStoreManager.setAccessToken(token).onSuccess {
                 updateSetupStep(SetupStep.SUCCESS)
             }.onError { error ->
-                failSetup()
                 handlePersistenceError(error)
             }
         }
@@ -164,12 +163,16 @@ class SetupViewModel @Inject constructor(
     }
 
     /**
-     * Emits a [SetupEvent.PersistenceErrorEvent] when a persistence error occurs.
+     * Emits a [SetupEvent.PersistenceErrorEvent] and marks setup as failed.
      *
      * @param error the persistence error that occurred
      */
     private fun handlePersistenceError(error: Error) {
-        val actualError = if (error is PersistenceError) error else PersistenceError.UNKNOWN
-        sendEvent(SetupEvent.PersistenceErrorEvent(actualError))
+        failSetup()
+        sendEvent(
+            SetupEvent.PersistenceErrorEvent(
+                if (error is PersistenceError) error else PersistenceError.UNKNOWN
+            )
+        )
     }
 }
