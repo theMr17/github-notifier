@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -22,12 +24,39 @@ android {
     }
 
     buildTypes {
+        val properties = Properties().apply {
+            val localPropertiesFile = project.rootProject.file("local.properties")
+            if (localPropertiesFile.exists()) {
+                load(localPropertiesFile.inputStream())
+            }
+        }
+
         debug {
             buildConfigField("String", "BASE_URL", "\"https://api.github.com/\"")
+            buildConfigField(
+                "String",
+                "CLIENT_ID",
+                "\"${properties.getProperty("CLIENT_ID", "dummy_client_id")}\""
+            )
+            buildConfigField(
+                "String",
+                "CLIENT_SECRET",
+                "\"${properties.getProperty("CLIENT_SECRET", "dummy_client_secret")}\""
+            )
         }
         release {
             isMinifyEnabled = false
             buildConfigField("String", "BASE_URL", "\"https://api.github.com/\"")
+            buildConfigField(
+                "String",
+                "CLIENT_ID",
+                "\"${properties.getProperty("CLIENT_ID", "dummy_client_id")}\""
+            )
+            buildConfigField(
+                "String",
+                "CLIENT_SECRET",
+                "\"${properties.getProperty("CLIENT_SECRET", "dummy_client_secret")}\""
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -48,6 +77,13 @@ android {
         buildConfig = true
         compose = true
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 dependencies {
@@ -59,9 +95,14 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.bundles.ktor)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.dagger.hilt)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.splash.screen)
+    implementation(libs.androidx.junit.ktx)
+
     ksp(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
@@ -70,11 +111,14 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.mockk)
 
-    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.dagger.hilt.testing)
+    androidTestImplementation(libs.ktor.client.mock)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.mockk.android)
     kspAndroidTest(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.androidx.ui.tooling)
