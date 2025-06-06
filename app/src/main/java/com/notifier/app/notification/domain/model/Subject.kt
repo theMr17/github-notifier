@@ -1,4 +1,4 @@
-package com.notifier.app.notification.domain
+package com.notifier.app.notification.domain.model
 
 data class Subject(
     val latestCommentUrl: String,

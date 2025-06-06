@@ -1,4 +1,4 @@
-package com.notifier.app.notification.domain
+package com.notifier.app.notification.domain.model
 
 import java.time.ZonedDateTime
 

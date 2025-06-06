@@ -2,6 +2,7 @@ package com.notifier.app.notification.domain
 
 import com.notifier.app.core.domain.util.Error
 import com.notifier.app.core.domain.util.Result
+import com.notifier.app.notification.domain.model.Notification
 
 /**
  * Interface defining the data source for fetching notifications.

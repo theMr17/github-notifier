@@ -7,8 +7,8 @@ import com.notifier.app.core.domain.util.Result
 import com.notifier.app.core.domain.util.map
 import com.notifier.app.notification.data.mappers.toNotification
 import com.notifier.app.notification.data.networking.dto.NotificationResponseDto
-import com.notifier.app.notification.domain.Notification
 import com.notifier.app.notification.domain.NotificationDataSource
+import com.notifier.app.notification.domain.model.Notification
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 
