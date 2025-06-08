@@ -12,6 +12,7 @@ data class NotificationUi(
     val title: String,
     val description: String,
     val time: String,
+    val isRead: Boolean,
 )
 
 fun Notification.toNotificationUi(): NotificationUi {
@@ -25,6 +26,7 @@ fun Notification.toNotificationUi(): NotificationUi {
     val description = "This is a brief description of the notification content. It can be a " +
             "comment, issue, or pull request update."
     val time = updatedAt.toRelativeTimeString()
+    val isRead = !unread
 
     return NotificationUi(
         id,
@@ -32,7 +34,8 @@ fun Notification.toNotificationUi(): NotificationUi {
         repositoryInfo,
         title,
         description,
-        time
+        time,
+        isRead
     )
 }
 
