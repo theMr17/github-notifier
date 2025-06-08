@@ -45,8 +45,6 @@ data class RepositoryDto(
     val gitRefsUrl: String,
     @SerialName("git_tags_url")
     val gitTagsUrl: String,
-    @SerialName("git_url")
-    val gitUrl: String,
     @SerialName("hooks_url")
     val hooksUrl: String,
     @SerialName("html_url")
@@ -83,8 +81,6 @@ data class RepositoryDto(
     val pullsUrl: String,
     @SerialName("releases_url")
     val releasesUrl: String,
-    @SerialName("ssh_url")
-    val sshUrl: String,
     @SerialName("stargazers_url")
     val stargazersUrl: String,
     @SerialName("statuses_url")
