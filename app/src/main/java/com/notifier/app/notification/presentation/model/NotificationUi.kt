@@ -15,7 +15,6 @@ data class NotificationUi(
 )
 
 fun Notification.toNotificationUi(): NotificationUi {
-    val id = id
     val iconResId = when (subject.type) {
         "PullRequest" -> R.drawable.ic_pull
         "Issue" -> R.drawable.ic_issue
