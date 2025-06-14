@@ -3,6 +3,8 @@ package com.notifier.app.di
 import com.notifier.app.auth.data.networking.RemoteAuthTokenDataSource
 import com.notifier.app.auth.domain.AuthTokenDataSource
 import com.notifier.app.core.data.networking.HttpClientFactory
+import com.notifier.app.notification.data.networking.RemoteNotificationDataSource
+import com.notifier.app.notification.domain.NotificationDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,5 +30,13 @@ object ApiModule {
         httpClient: HttpClient,
     ): AuthTokenDataSource {
         return RemoteAuthTokenDataSource(httpClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteNotificationDataSource(
+        httpClient: HttpClient,
+    ): NotificationDataSource {
+        return RemoteNotificationDataSource(httpClient)
     }
 }

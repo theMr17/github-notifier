@@ -6,9 +6,9 @@ import com.notifier.app.core.domain.util.NetworkError
 import com.notifier.app.core.domain.util.Result
 import com.notifier.app.core.domain.util.map
 import com.notifier.app.notification.data.mappers.toNotification
-import com.notifier.app.notification.data.networking.dto.NotificationResponseDto
-import com.notifier.app.notification.domain.Notification
+import com.notifier.app.notification.data.networking.dto.NotificationDto
 import com.notifier.app.notification.domain.NotificationDataSource
+import com.notifier.app.notification.domain.model.Notification
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 
@@ -34,13 +34,18 @@ class RemoteNotificationDataSource(
      * @return A [Result] containing either a list of [Notification] objects on success, or a
      * [NetworkError] on failure.
      */
-    override suspend fun getNotifications(): Result<List<Notification>, NetworkError> {
-        return safeCall<NotificationResponseDto> {
+    override suspend fun getNotifications(includeRead: Boolean): Result<List<Notification>,
+            NetworkError> {
+        return safeCall<List<NotificationDto>> {
             httpClient.get(
-                urlString = constructUrl("/notification")
-            )
+                urlString = constructUrl("/notifications")
+            ) {
+                url {
+                    parameters.append("all", includeRead.toString())
+                }
+            }
         }.map { response ->
-            response.data.map { it.toNotification() }
+            response.map { it.toNotification() }
         }
     }
 }

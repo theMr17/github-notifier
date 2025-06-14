@@ -5,10 +5,10 @@ import com.notifier.app.notification.data.networking.dto.OwnerDto
 import com.notifier.app.notification.data.networking.dto.RepositoryDto
 import com.notifier.app.notification.data.networking.dto.SubjectDto
 import com.notifier.app.notification.data.util.toZonedDateTimeOrDefault
-import com.notifier.app.notification.domain.Notification
-import com.notifier.app.notification.domain.Owner
-import com.notifier.app.notification.domain.Repository
-import com.notifier.app.notification.domain.Subject
+import com.notifier.app.notification.domain.model.Notification
+import com.notifier.app.notification.domain.model.Owner
+import com.notifier.app.notification.domain.model.Repository
+import com.notifier.app.notification.domain.model.Subject
 
 fun NotificationDto.toNotification() = Notification(
     id = id,
