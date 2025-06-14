@@ -86,6 +86,7 @@ private fun NotificationItemPreview() {
                 "comment, issue, or pull request update.",
         time = "3h",
         isRead = false,
+        redirectUrl = "https://github.com/theMr17/github-notifier",
     )
 
     GitHubNotifierTheme {

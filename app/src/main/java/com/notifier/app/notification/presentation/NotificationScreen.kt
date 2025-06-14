@@ -61,6 +61,7 @@ class NotificationStateParameterProvider : PreviewParameterProvider<Notification
                     "comment, issue, or pull request update.",
             time = "${it}h",
             isRead = Random.nextBoolean(),
+            redirectUrl = "https://github.com/theMr17/github-notifier",
         )
     }
 
