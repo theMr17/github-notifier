@@ -7,14 +7,20 @@ import kotlin.math.abs
 fun ZonedDateTime.toRelativeTimeString(): String {
     val now = ZonedDateTime.now()
     val duration = Duration.between(this, now)
-    val seconds = abs(duration.seconds)
+    val seconds = duration.seconds
+
+    val absSeconds = abs(seconds)
+
+    val minute = 60
+    val hour = 60 * minute
+    val day = 24 * hour
+    val week = 7 * day
 
     return when {
-        seconds < 60 -> "${seconds}s"
-        seconds < 60 * 60 -> "${seconds / 60}m"
-        seconds < 60 * 60 * 24 -> "${seconds / 3600}h"
-        seconds < 60 * 60 * 24 * 7 -> "${seconds / 86400}d"
-        else -> "${seconds / (86400 * 7)}w"
+        absSeconds < minute -> "${absSeconds}s"
+        absSeconds < hour -> "${absSeconds / minute}m"
+        absSeconds < day -> "${absSeconds / hour}h"
+        absSeconds < week -> "${absSeconds / day}d"
+        else -> "${absSeconds / week}w"
     }
 }
-
