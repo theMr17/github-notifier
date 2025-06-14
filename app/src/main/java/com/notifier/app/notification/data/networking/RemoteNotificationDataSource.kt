@@ -34,11 +34,16 @@ class RemoteNotificationDataSource(
      * @return A [Result] containing either a list of [Notification] objects on success, or a
      * [NetworkError] on failure.
      */
-    override suspend fun getNotifications(): Result<List<Notification>, NetworkError> {
+    override suspend fun getNotifications(includeRead: Boolean): Result<List<Notification>,
+            NetworkError> {
         return safeCall<List<NotificationDto>> {
             httpClient.get(
                 urlString = constructUrl("/notifications")
-            )
+            ) {
+                url {
+                    parameters.append("all", includeRead.toString())
+                }
+            }
         }.map { response ->
             response.map { it.toNotification() }
         }

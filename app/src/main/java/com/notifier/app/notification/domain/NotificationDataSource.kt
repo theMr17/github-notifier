@@ -20,7 +20,10 @@ interface NotificationDataSource {
      * - A **successful** list of [Notification] objects.
      * - A **failure** with an appropriate [Error].
      *
+     * @param includeRead Whether to include read notifications in the result. Defaults to `true`.
      * @return A [Result] containing either a list of notifications or an error.
      */
-    suspend fun getNotifications(): Result<List<Notification>, Error>
+    suspend fun getNotifications(
+        includeRead: Boolean = true
+    ): Result<List<Notification>, Error>
 }

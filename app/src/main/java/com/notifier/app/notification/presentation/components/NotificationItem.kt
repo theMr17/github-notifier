@@ -48,8 +48,9 @@ fun NotificationItem(
             )
             Text(
                 text = notificationUi.title,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Medium,
                 lineHeight = 20.sp,
+                fontSize = 18.sp
             )
             Text(
                 text = notificationUi.description,
