@@ -35,6 +35,14 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.notifier.app.R
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
+/**
+ * Wraps a composable with a notification permission check on Android 13+.
+ *
+ * Displays a prompt to the user requesting notification permission if not granted.
+ *
+ * @param content The actual content of the screen above which the notification permission
+ * prompt will be displayed.
+ */
 @Composable
 fun WithNotificationPermission(
     content: @Composable () -> Unit,
@@ -45,9 +53,15 @@ fun WithNotificationPermission(
     }
 }
 
+/**
+ * Handles runtime notification permission request for Android 13+ devices.
+ *
+ * Shows the system dialog once and then falls back to a custom UI prompt
+ * to guide the user to settings if permission is denied permanently.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun NotificationPermissionHandler() {
+private fun NotificationPermissionHandler() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
 
     val context = LocalContext.current
@@ -66,7 +80,7 @@ fun NotificationPermissionHandler() {
     }
 
     if (!permissionState.status.isGranted) {
-        NotificationPermissionPrompt (
+        NotificationPermissionPrompt(
             shouldShowRationale = permissionState.status.shouldShowRationale,
             onRequestPermission = {
                 hasRequested = true
@@ -87,9 +101,18 @@ fun NotificationPermissionHandler() {
     }
 }
 
-
+/**
+ * A UI prompt to guide the user for notification permission.
+ *
+ * If rationale should be shown, it allows retrying the permission request.
+ * Otherwise, it suggests navigating to system settings to enable permission manually.
+ *
+ * @param shouldShowRationale Whether to explain the need for permission again.
+ * @param onRequestPermission Callback for retrying the permission request.
+ * @param onOpenSettings Callback to open the app's settings screen.
+ */
 @Composable
-fun NotificationPermissionPrompt(
+private fun NotificationPermissionPrompt(
     shouldShowRationale: Boolean,
     onRequestPermission: () -> Unit,
     onOpenSettings: () -> Unit,
@@ -134,6 +157,12 @@ fun NotificationPermissionPrompt(
     }
 }
 
+/**
+ * Preview parameter provider for displaying different notification permission states in previews.
+ *
+ * Provides sample values for the `shouldShowRationale` flag to simulate UI scenarios
+ * where the user has either denied permission once or permanently.
+ */
 class ShouldShowRationaleProvider : PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>
         get() = sequenceOf(
@@ -142,6 +171,11 @@ class ShouldShowRationaleProvider : PreviewParameterProvider<Boolean> {
         )
 }
 
+/**
+ * Preview of the [NotificationPermissionPrompt] composable with dynamic colors and support for light/dark themes.
+ *
+ * This preview allows visualization of the permission prompt in both rationale and permanent denial states.
+ */
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable
