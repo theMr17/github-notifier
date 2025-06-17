@@ -87,15 +87,18 @@ private fun NotificationPermissionHandler() {
                 permissionState.launchPermissionRequest()
             },
             onOpenSettings = {
-                val intent = Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts(
-                        /* scheme = */ "package",
-                        /* ssp = */ context.packageName,
-                        /* fragment = */ null
-                    )
-                )
-                context.startActivity(intent)
+                runCatching {
+                    Intent(
+                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.fromParts(
+                            /* scheme = */ "package",
+                            /* ssp = */ context.packageName,
+                            /* fragment = */ null
+                        )
+                    ).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }.let(context::startActivity)
+                }
             }
         )
     }
@@ -181,7 +184,7 @@ class ShouldShowRationaleProvider : PreviewParameterProvider<Boolean> {
 @Composable
 private fun NotificationPermissionPromptPreview(
     @PreviewParameter(ShouldShowRationaleProvider::class)
-    shouldShowRationale: Boolean
+    shouldShowRationale: Boolean,
 ) {
     GitHubNotifierTheme {
         NotificationPermissionPrompt(
