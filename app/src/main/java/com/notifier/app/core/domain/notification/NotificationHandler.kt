@@ -2,8 +2,11 @@ package com.notifier.app.core.domain.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.net.toUri
 import com.notifier.app.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -22,7 +25,6 @@ import javax.inject.Singleton
 class NotificationHandler @Inject constructor(
     @ApplicationContext private val applicationContext: Context,
 ) {
-
     /**
      * Displays a notification with the given details.
      *
@@ -30,18 +32,28 @@ class NotificationHandler @Inject constructor(
      * @param title The title displayed in the notification.
      * @param message The body content of the notification.
      * @param channel The [AppNotificationChannel] that defines the channel for this notification.
+     * @param url The URL to open in the browser when the notification is clicked.
      */
     fun showNotification(
         id: Int,
         title: String,
         message: String,
         channel: AppNotificationChannel,
+        url: String,
     ) {
+        val pendingIntent = PendingIntent.getActivity(
+            /* context = */ applicationContext,
+            /* requestCode = */ id,
+            /* intent = */ Intent(Intent.ACTION_VIEW, url.toUri()),
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val notification = NotificationCompat.Builder(applicationContext, channel.id)
             .setContentTitle(title)
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
 
