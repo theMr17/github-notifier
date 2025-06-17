@@ -46,9 +46,14 @@ fun NotificationPermissionHandler() {
 
     val context = LocalContext.current
     val permissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    var hasRequested by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        if (!permissionState.status.isGranted && !permissionState.status.shouldShowRationale) {
+    LaunchedEffect(permissionState.status) {
+        if (!hasRequested &&
+            !permissionState.status.isGranted &&
+            !permissionState.status.shouldShowRationale
+        ) {
+            hasRequested = true
             permissionState.launchPermissionRequest()
         }
     }
@@ -56,7 +61,10 @@ fun NotificationPermissionHandler() {
     if (!permissionState.status.isGranted) {
         NotificationPermissionBanner(
             shouldShowRationale = permissionState.status.shouldShowRationale,
-            onRequestPermission = { permissionState.launchPermissionRequest() },
+            onRequestPermission = {
+                hasRequested = true
+                permissionState.launchPermissionRequest()
+            },
             onOpenSettings = {
                 val intent = Intent(
                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
