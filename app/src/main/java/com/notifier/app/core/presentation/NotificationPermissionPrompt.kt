@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -31,6 +32,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import com.notifier.app.R
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 @Composable
@@ -52,6 +54,7 @@ fun NotificationPermissionHandler() {
     val permissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
     var hasRequested by rememberSaveable { mutableStateOf(false) }
 
+    // Launch the system permission dialog only once, if applicable
     LaunchedEffect(permissionState.status) {
         if (!hasRequested &&
             !permissionState.status.isGranted &&
@@ -63,7 +66,7 @@ fun NotificationPermissionHandler() {
     }
 
     if (!permissionState.status.isGranted) {
-        NotificationPermissionBanner(
+        NotificationPermissionPrompt (
             shouldShowRationale = permissionState.status.shouldShowRationale,
             onRequestPermission = {
                 hasRequested = true
@@ -72,7 +75,11 @@ fun NotificationPermissionHandler() {
             onOpenSettings = {
                 val intent = Intent(
                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.fromParts("package", context.packageName, null)
+                    Uri.fromParts(
+                        /* scheme = */ "package",
+                        /* ssp = */ context.packageName,
+                        /* fragment = */ null
+                    )
                 )
                 context.startActivity(intent)
             }
@@ -80,22 +87,23 @@ fun NotificationPermissionHandler() {
     }
 }
 
+
 @Composable
-fun NotificationPermissionBanner(
+fun NotificationPermissionPrompt(
     shouldShowRationale: Boolean,
     onRequestPermission: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
     val message = if (shouldShowRationale) {
-        "To deliver GitHub notifications like pull requests, issues, and mentions, we need notification access. Please allow it."
+        stringResource(R.string.notification_permission_rationale_message)
     } else {
-        "Notification access is required to show updates from your GitHub activity. Enable it from system settings."
+        stringResource(R.string.notification_permission_denied_message)
     }
 
     val actionButtonText = if (shouldShowRationale) {
-        "Allow Notifications"
+        stringResource(R.string.notification_permission_allow_button_text)
     } else {
-        "Open Settings"
+        stringResource(R.string.notification_permission_settings_button_text)
     }
 
     val onClick = if (shouldShowRationale) onRequestPermission else onOpenSettings
@@ -126,7 +134,7 @@ fun NotificationPermissionBanner(
     }
 }
 
-class NotificationPermissionPreviewProvider : PreviewParameterProvider<Boolean> {
+class ShouldShowRationaleProvider : PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>
         get() = sequenceOf(
             true,  // Should show rationale (e.g., user denied once)
@@ -137,12 +145,12 @@ class NotificationPermissionPreviewProvider : PreviewParameterProvider<Boolean> 
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable
-private fun NotificationPermissionBannerPreview(
-    @PreviewParameter(NotificationPermissionPreviewProvider::class)
+private fun NotificationPermissionPromptPreview(
+    @PreviewParameter(ShouldShowRationaleProvider::class)
     shouldShowRationale: Boolean
 ) {
     GitHubNotifierTheme {
-        NotificationPermissionBanner(
+        NotificationPermissionPrompt(
             shouldShowRationale,
             onRequestPermission = {},
             onOpenSettings = {}
