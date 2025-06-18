@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -97,6 +98,12 @@ private fun NotificationPermissionHandler(
                     ).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     }.let(context::startActivity)
+                }.onFailure { throwable ->
+                    Log.e(
+                        "WithNotificationPermission",
+                        "Unable to open app settings",
+                        throwable
+                    )
                 }
             }
         )

@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -25,15 +26,17 @@ import com.google.accompanist.permissions.shouldShowRationale
 fun rememberNotificationPermissionState(): NotificationPermissionState {
     val state = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
-    return object : NotificationPermissionState {
-        override val shouldShowRationale: Boolean
-            get() = state.status.shouldShowRationale
+    return remember(state) {
+        object : NotificationPermissionState {
+            override val shouldShowRationale: Boolean
+                get() = state.status.shouldShowRationale
 
-        override val isGranted: Boolean
-            get() = state.status.isGranted
+            override val isGranted: Boolean
+                get() = state.status.isGranted
 
-        override fun requestPermission() {
-            state.launchPermissionRequest()
+            override fun requestPermission() {
+                state.launchPermissionRequest()
+            }
         }
     }
 }
