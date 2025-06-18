@@ -1,6 +1,5 @@
-package com.notifier.app.core.presentation
+package com.notifier.app.core.presentation.notification
 
-import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -28,63 +27,63 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.notifier.app.R
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
 /**
- * Wraps a composable with a notification permission check on Android 13+.
+ * Wraps a screen or composable with logic to check and request notification permission on
+ * Android 13+.
  *
- * Displays a prompt to the user requesting notification permission if not granted.
+ * If the permission is not granted, it will prompt the user appropriately—either by showing a
+ * system dialog or a fallback message guiding them to enable it manually from settings.
  *
- * @param content The actual content of the screen above which the notification permission
- * prompt will be displayed.
+ * @param permissionState The [NotificationPermissionState] to use, primarily for testability.
+ * If null, the default state from [rememberNotificationPermissionState] is used.
+ * @param content The main content to be displayed alongside the permission prompt.
  */
 @Composable
 fun WithNotificationPermission(
+    permissionState: NotificationPermissionState? = null,
     content: @Composable () -> Unit,
 ) {
     Column {
-        NotificationPermissionHandler()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NotificationPermissionHandler(
+                permissionState = permissionState ?: rememberNotificationPermissionState()
+            )
+        }
         content()
     }
 }
 
 /**
- * Handles runtime notification permission request for Android 13+ devices.
+ * Displays the appropriate notification permission prompt if the permission isn't granted.
  *
- * Shows the system dialog once and then falls back to a custom UI prompt
- * to guide the user to settings if permission is denied permanently.
+ * - If permission can still be requested, it shows a rationale and a retry button.
+ * - If permanently denied, it shows a message guiding the user to system settings.
+ *
+ * @param permissionState Current state of the notification permission.
  */
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun NotificationPermissionHandler() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-
+private fun NotificationPermissionHandler(
+    permissionState: NotificationPermissionState
+) {
     val context = LocalContext.current
-    val permissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
     var hasRequested by rememberSaveable { mutableStateOf(false) }
 
-    // Launch the system permission dialog only once, if applicable
-    LaunchedEffect(permissionState.status) {
-        if (!hasRequested &&
-            !permissionState.status.isGranted &&
-            !permissionState.status.shouldShowRationale
-        ) {
+    LaunchedEffect(permissionState.isGranted, permissionState.shouldShowRationale) {
+        if (!hasRequested && !permissionState.isGranted && !permissionState.shouldShowRationale) {
             hasRequested = true
-            permissionState.launchPermissionRequest()
+            permissionState.requestPermission()
         }
     }
 
-    if (!permissionState.status.isGranted) {
+    if (!permissionState.isGranted) {
         NotificationPermissionPrompt(
-            shouldShowRationale = permissionState.status.shouldShowRationale,
+            shouldShowRationale = permissionState.shouldShowRationale,
             onRequestPermission = {
                 hasRequested = true
-                permissionState.launchPermissionRequest()
+                permissionState.requestPermission()
             },
             onOpenSettings = {
                 runCatching {

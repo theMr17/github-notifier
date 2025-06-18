@@ -21,7 +21,7 @@ import com.notifier.app.auth.presentation.login.LoginScreen
 import com.notifier.app.auth.presentation.setup.SetupRoute
 import com.notifier.app.auth.presentation.setup.SetupScreen
 import com.notifier.app.auth.presentation.util.GitHubAuthIntentProvider
-import com.notifier.app.core.presentation.WithNotificationPermission
+import com.notifier.app.core.presentation.notification.WithNotificationPermission
 import com.notifier.app.notification.presentation.NotificationRoute
 import com.notifier.app.notification.presentation.NotificationScreen
 import com.notifier.app.ui.theme.GitHubNotifierTheme
