@@ -34,7 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        api-level: [29, 33]
+        api-level: [ 29, 33 ]
+      fail-fast: false
     steps:
       - uses: actions/checkout@v4
 
@@ -55,6 +56,12 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Install required system images
+        run: |
+          yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-${{ matrix.api-level }}" \
+            "system-images;android-${{ matrix.api-level }};google_apis;x86_64"
 
       - name: AVD cache
         uses: actions/cache@v4
@@ -86,4 +93,4 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest --daemon || true
+          script: ./gradlew connectedDebugAndroidTest --daemon
