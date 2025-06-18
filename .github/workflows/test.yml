@@ -32,10 +32,16 @@ jobs:
 
   instrumented_tests:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        api-level: [ 29, 33 ]
+        include:
+          - api-level: 29
+            arch: x86
+          - api-level: 33
+            arch: x86_64
       fail-fast: false
+
     steps:
       - uses: actions/checkout@v4
 
@@ -64,26 +70,26 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.arch }}
 
       - name: Create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true' || matrix.api-level == 29
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: ${{ matrix.arch }}
           target: google_apis
-          arch: ${{ matrix.api-level == 29 && 'x86' || 'x86_64' }}
           force-avd-creation: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-          script: echo "AVD snapshot generated for API ${{ matrix.api-level }}."
+          script: echo "AVD snapshot generated for API ${{ matrix.api-level }} - ${{ matrix.arch }}."
 
       - name: Run tests with AVD
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: ${{ matrix.arch }}
           target: google_apis
-          arch: ${{ matrix.api-level == 29 && 'x86' || 'x86_64' }}
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
