@@ -6,10 +6,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.test.filters.SdkSuppress
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 import org.junit.Rule
 import org.junit.Test
 
+@SdkSuppress(minSdkVersion = 33)
 class WithNotificationPermissionTest {
     @get:Rule
     val composeTestRule = createComposeRule()
