@@ -18,6 +18,7 @@ navigation = "2.8.9"
 hiltNavigationCompose = "1.2.0"
 datastore = "1.1.4"
 splashScreen = "1.0.1"
+accompanistPermissions = "0.37.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -51,6 +52,7 @@ dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compi
 dagger-hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "daggerHilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-splash-screen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissions" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
