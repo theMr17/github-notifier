@@ -102,6 +102,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.splash.screen)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.accompanist.permissions)
 
     ksp(libs.dagger.hilt.compiler)
 

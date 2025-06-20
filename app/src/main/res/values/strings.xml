@@ -14,4 +14,8 @@
     <string name="setup_success_message">Connected successfully!</string>
     <string name="continue_button_text">Continue</string>
     <string name="setup_failed_message">Connection failed. Please try again.</string>
+    <string name="notification_permission_rationale_message">To deliver GitHub notifications like pull requests, issues, and mentions, we need notification access. Please allow it.</string>
+    <string name="notification_permission_denied_message">Notification access is required to show updates from your GitHub activity. Enable it from system settings.</string>
+    <string name="notification_permission_allow_button_text">Allow Notifications</string>
+    <string name="notification_permission_settings_button_text">Open Settings</string>
 </resources>
