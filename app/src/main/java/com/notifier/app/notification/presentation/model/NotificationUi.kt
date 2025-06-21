@@ -20,6 +20,7 @@ fun Notification.toNotificationUi(): NotificationUi {
     val iconResId = when (subject.type) {
         "PullRequest" -> R.drawable.ic_pull
         "Issue" -> R.drawable.ic_issue
+        "Discussion" -> R.drawable.ic_discussion
         else -> R.drawable.ic_issue
     }
     val number = subject.url.substringAfterLast("/").toInt()

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +68,9 @@ fun NotificationItem(
             Text(text = notificationUi.time)
 
             if (!notificationUi.isRead) {
-                Badge()
+                Badge(
+                    modifier = Modifier.size(8.dp),
+                )
             }
         }
     }
