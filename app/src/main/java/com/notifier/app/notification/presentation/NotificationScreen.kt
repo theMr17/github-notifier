@@ -48,7 +48,8 @@ class NotificationStateParameterProvider : PreviewParameterProvider<Notification
     private val notificationUiList = (1..10).map {
         val iconResIdList = listOf(
             R.drawable.ic_pull,
-            R.drawable.ic_issue
+            R.drawable.ic_issue,
+            R.drawable.ic_discussion
         )
         val randomIconResIdIndex = Random.nextInt(until = iconResIdList.size)
         NotificationUi(
