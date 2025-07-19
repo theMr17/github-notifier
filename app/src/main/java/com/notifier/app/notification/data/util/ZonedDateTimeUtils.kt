@@ -16,7 +16,7 @@ import java.time.ZonedDateTime
  *                Defaults to [Instant.EPOCH] at the system's default time zone.
  * @return The parsed [ZonedDateTime] or the provided default value if parsing fails.
  */
-fun String.toZonedDateTimeOrDefault(
+fun String?.toZonedDateTimeOrDefault(
     default: ZonedDateTime = Instant.EPOCH.atZone(ZoneId.systemDefault()),
 ): ZonedDateTime {
     return try {

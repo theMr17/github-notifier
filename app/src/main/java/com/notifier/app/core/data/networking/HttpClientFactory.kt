@@ -11,10 +11,10 @@ import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
-import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -61,19 +61,17 @@ class HttpClientFactory @Inject constructor(
         // Set default request headers and properties
         defaultRequest {
             contentType(ContentType.Application.Json)
-        }
 
-        val accessToken = runBlocking {
-            var retrievedToken = ""
-            dataStoreManager.getAccessToken().onSuccess {
-                retrievedToken = it
+            val accessToken = runBlocking {
+                var retrievedToken = ""
+                dataStoreManager.getAccessToken().onSuccess {
+                    retrievedToken = it
+                }
+                return@runBlocking retrievedToken
             }
-            return@runBlocking retrievedToken
-        }
 
-        headers {
-            append(HttpHeaders.Authorization, "Bearer $accessToken")
-            append("X-GitHub-Api-Version", "2022-11-28")
+            header(HttpHeaders.Authorization, "Bearer $accessToken")
+            header("X-GitHub-Api-Version", "2022-11-28")
         }
     }
 }

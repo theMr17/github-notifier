@@ -8,7 +8,7 @@ data class NotificationDto(
     @SerialName("id")
     val id: String,
     @SerialName("last_read_at")
-    val lastReadAt: String,
+    val lastReadAt: String?,
     @SerialName("reason")
     val reason: String,
     @SerialName("repository")
