@@ -38,8 +38,11 @@ fun NotificationScreen(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(state.notifications.size) {
-            NotificationItem(state.notifications[it])
+        items(
+            count = state.notifications.size,
+            key = { index -> state.notifications[index].id }
+        ) { index ->
+            NotificationItem(state.notifications[index])
         }
     }
 }

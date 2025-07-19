@@ -32,11 +32,7 @@ class NotificationViewModel @Inject constructor(
         )
 
     override fun onAction(action: NotificationAction) {
-        when (action) {
-            is NotificationAction.OnNotificationItemClick -> {
-                // Handle notification item click, e.g., navigate to details
-            }
-        }
+        TODO("Not yet implemented")
     }
 
     private fun getNotifications() {
