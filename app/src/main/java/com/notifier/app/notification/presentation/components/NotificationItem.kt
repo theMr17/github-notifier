@@ -83,10 +83,8 @@ private fun NotificationItemPreview() {
         id = "1",
         iconResId = R.drawable.ic_pull,
         repositoryInfo = "owner/repo #1234",
-        title = "Title of the notification goes here " +
-                "(e.g., comment, issue, or pull request update)",
-        description = "This is a brief description of the notification content. It can be a " +
-                "comment, issue, or pull request update.",
+        title = "New comment on your pull request",
+        description = "A GitHub user commented: 'Looks good to me!'",
         time = "3h",
         isRead = false,
         redirectUrl = "https://github.com/theMr17/github-notifier",
