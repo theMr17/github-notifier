@@ -16,10 +16,26 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for managing the Notification screen's state and events.
+ *
+ * This ViewModel handles:
+ * - Fetching notifications from the domain layer
+ * - Updating the UI state based on loading and error results
+ * - Sending one-time events such as network errors
+ *
+ * @property notificationDataSource Used to fetch notification data from the domain layer.
+ */
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val notificationDataSource: NotificationDataSource,
 ) : BaseViewModel<NotificationState, NotificationEvent, NotificationAction>(NotificationState()) {
+
+    /**
+     * The state flow that exposes the current notification UI state.
+     *
+     * Starts by setting loading to true and then fetching the notifications.
+     */
     override val state: StateFlow<NotificationState> = mutableStateFlow
         .onStart {
             mutableStateFlow.update { it.copy(isLoading = true) }
@@ -31,10 +47,22 @@ class NotificationViewModel @Inject constructor(
             initialValue = NotificationState()
         )
 
+    /**
+     * Handles user-triggered actions from the UI.
+     *
+     * @param action the user action to handle
+     */
     override fun onAction(action: NotificationAction) {
+        // Future user interactions (e.g., mark as read, refresh) will be handled here.
         TODO("Not yet implemented")
     }
 
+    /**
+     * Fetches notifications from the [notificationDataSource].
+     *
+     * Updates the [mutableStateFlow] with the fetched data on success,
+     * or sends a [NotificationEvent.NetworkErrorEvent] on failure.
+     */
     private fun getNotifications() {
         viewModelScope.launch {
             notificationDataSource.getNotifications()
