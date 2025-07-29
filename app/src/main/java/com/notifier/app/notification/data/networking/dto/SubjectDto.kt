@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SubjectDto(
     @SerialName("latest_comment_url")
-    val latestCommentUrl: String,
+    val latestCommentUrl: String?,
     @SerialName("title")
     val title: String,
     @SerialName("type")

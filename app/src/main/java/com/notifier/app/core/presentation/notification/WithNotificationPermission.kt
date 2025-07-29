@@ -67,7 +67,7 @@ fun WithNotificationPermission(
  */
 @Composable
 private fun NotificationPermissionHandler(
-    permissionState: NotificationPermissionState
+    permissionState: NotificationPermissionState,
 ) {
     val context = LocalContext.current
     var hasRequested by rememberSaveable { mutableStateOf(false) }
