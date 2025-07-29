@@ -19,6 +19,17 @@ import com.notifier.app.notification.presentation.model.NotificationUi
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 import kotlin.random.Random
 
+/**
+ * A composable function that displays the GitHub notification screen UI.
+ *
+ * Based on the current [NotificationState], this screen renders either a loading indicator or
+ * a list of notifications:
+ * - **Loading State**: A centered [CircularProgressIndicator] is shown when [NotificationState.isLoading] is `true`.
+ * - **Loaded State**: A scrollable list of [NotificationItem]s is displayed when notifications are available.
+ *
+ * @param state The current state of the notification screen, including loading status and the list of notifications.
+ * @param modifier An optional [Modifier] to be applied to the root layout.
+ */
 @Composable
 fun NotificationScreen(
     state: NotificationState,
@@ -47,6 +58,12 @@ fun NotificationScreen(
     }
 }
 
+/**
+ * Preview parameter provider for displaying different notification states in previews.
+ *
+ * Provides sample values for the [NotificationState] to simulate both loading and loaded states
+ * with fake notification data, including randomized icons and read/unread states.
+ */
 class NotificationStateParameterProvider : PreviewParameterProvider<NotificationState> {
     private val notificationUiList = (1..10).map {
         val iconResIdList = listOf(
@@ -54,15 +71,13 @@ class NotificationStateParameterProvider : PreviewParameterProvider<Notification
             R.drawable.ic_issue,
             R.drawable.ic_discussion
         )
-        val randomIconResIdIndex = Random.nextInt(until = iconResIdList.size)
         NotificationUi(
             id = it.toString(),
-            iconResId = iconResIdList[randomIconResIdIndex],
+            iconResId = iconResIdList.random(),
             repositoryInfo = "theMr17/github-notifier #1234",
             title = "Title of the notification goes here " +
                     "(e.g., comment, issue, or pull request update)",
-            description = "This is a brief description of the notification content. It can be a " +
-                    "comment, issue, or pull request update.",
+            description = "This is a brief description of the notification content.",
             time = "${it}h",
             isRead = Random.nextBoolean(),
             redirectUrl = "https://github.com/theMr17/github-notifier",
@@ -82,6 +97,13 @@ class NotificationStateParameterProvider : PreviewParameterProvider<Notification
         )
 }
 
+/**
+ * Preview of the [NotificationScreen] composable with dynamic colors and light/dark theme support.
+ *
+ * This preview helps visualize how the Notification screen looks in different visual states.
+ *
+ * @param state The preview parameter simulating different [NotificationState]s.
+ */
 @PreviewLightDark
 @PreviewDynamicColors
 @Composable

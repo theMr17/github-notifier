@@ -22,6 +22,20 @@ import com.notifier.app.R
 import com.notifier.app.notification.presentation.model.NotificationUi
 import com.notifier.app.ui.theme.GitHubNotifierTheme
 
+/**
+ * A composable function that displays an individual GitHub notification item.
+ *
+ * Each notification displays the following:
+ * - **Icon**: Visual indicator representing the type (e.g., pull request, issue).
+ * - **Repository Info**: Information about the repository and reference number.
+ * - **Title**: Brief summary of the notification content.
+ * - **Description**: Additional detail (single-line preview).
+ * - **Time**: How long ago the event occurred.
+ * - **Unread Badge**: A small badge shown if the notification is unread.
+ *
+ * @param notificationUi The data model representing a GitHub notification.
+ * @param modifier An optional [Modifier] for customizing the layout.
+ */
 @Composable
 fun NotificationItem(
     notificationUi: NotificationUi,
@@ -34,7 +48,8 @@ fun NotificationItem(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Image(
-            modifier = Modifier.padding(end = 16.dp),
+            modifier = Modifier
+                .padding(end = 16.dp),
             painter = painterResource(id = notificationUi.iconResId),
             contentDescription = null
         )
@@ -45,13 +60,14 @@ fun NotificationItem(
             Text(
                 text = notificationUi.repositoryInfo,
                 fontWeight = FontWeight.Light
-
             )
             Text(
                 text = notificationUi.title,
                 fontWeight = FontWeight.Medium,
                 lineHeight = 20.sp,
-                fontSize = 18.sp
+                fontSize = 18.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = notificationUi.description,
@@ -76,13 +92,16 @@ fun NotificationItem(
     }
 }
 
+/**
+ * A preview of [NotificationItem] using sample data to visualize UI behavior.
+ */
 @Preview(showBackground = true)
 @Composable
 private fun NotificationItemPreview() {
     val notificationUi = NotificationUi(
         id = "1",
         iconResId = R.drawable.ic_pull,
-        repositoryInfo = "owner/repo #1234",
+        repositoryInfo = "theMr17/github-notifier #1234",
         title = "New comment on your pull request",
         description = "A GitHub user commented: 'Looks good to me!'",
         time = "3h",
