@@ -11,8 +11,10 @@ package com.notifier.app.core.presentation.notification
  */
 class FakeNotificationPermissionState(
     override val isGranted: Boolean,
-    override val shouldShowRationale: Boolean
+    override val shouldShowRationale: Boolean,
 ) : NotificationPermissionState {
     /** No-op implementation since this is only used in tests. */
-    override fun requestPermission() { /* No-op for tests */ }
+    override fun requestPermission() {
+        /* No-op for tests */
+    }
 }

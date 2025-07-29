@@ -24,6 +24,6 @@ interface NotificationDataSource {
      * @return A [Result] containing either a list of notifications or an error.
      */
     suspend fun getNotifications(
-        includeRead: Boolean = true
+        includeRead: Boolean = true,
     ): Result<List<Notification>, Error>
 }
