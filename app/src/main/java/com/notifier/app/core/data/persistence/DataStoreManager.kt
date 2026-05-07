@@ -74,4 +74,28 @@ class DataStoreManager @Inject constructor(
             preferences.remove(PreferenceKeys.OAUTH_STATE)
         }
     }
+
+    /**
+     * Retrieves the set of GitHub notification IDs that have already been shown
+     * as system notifications.
+     *
+     * @return [Result.Success] with the set of IDs, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun getShownNotificationIds(): Result<Set<String>, Error> = runDataStoreCatching {
+        dataStore.data
+            .map { preferences -> preferences[PreferenceKeys.SHOWN_NOTIFICATION_IDS] ?: emptySet() }
+            .first()
+    }
+
+    /**
+     * Saves the set of GitHub notification IDs that have been shown as system notifications.
+     *
+     * @param ids the set of notification IDs to store.
+     * @return [Result.Success] if stored successfully, or [Result.Error] with a [PersistenceError].
+     */
+    suspend fun setShownNotificationIds(ids: Set<String>): Result<Unit, Error> = runDataStoreCatching {
+        dataStore.edit { preferences ->
+            preferences[PreferenceKeys.SHOWN_NOTIFICATION_IDS] = ids
+        }
+    }
 }
