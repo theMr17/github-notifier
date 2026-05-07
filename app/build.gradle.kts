@@ -103,6 +103,7 @@ dependencies {
     implementation(libs.androidx.splash.screen)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.work.runtime.ktx)
 
     ksp(libs.dagger.hilt.compiler)
 
